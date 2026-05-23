@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ECONM-I Practice Exams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f4ead2;--paper-light:#fbf5e3;--ink:#1a120a;--ink-soft:#463a26;--ink-faint:#8a7654;--rule:#c4a373;--rule-soft:#ddc99c;--demand:#a83232;--supply:#3d5d2e;--gold:#c89933;--display:"Fraunces","Iowan Old Style",Georgia,serif;--mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--display);font-variation-settings:"opsz" 14,"SOFT" 30;font-size:18px;line-height:1.6;background-image:radial-gradient(circle at 30% 20%,rgba(196,163,115,0.10),transparent 55%),radial-gradient(circle at 75% 80%,rgba(168,50,50,0.06),transparent 60%);}
+main{max-width:680px;margin:80px auto;padding:0 28px;}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 14px;display:flex;align-items:center;gap:14px;}
+.eyebrow::before,.eyebrow::after{content:"";flex:0 0 32px;height:1px;background:var(--rule);}.eyebrow::after{flex:1;}
+h1{font-family:var(--display);font-variation-settings:"opsz" 144,"SOFT" 0;font-weight:800;font-size:clamp(40px,7vw,72px);line-height:0.98;letter-spacing:-0.025em;margin:0 0 12px;}
+h1 em{font-style:italic;font-variation-settings:"opsz" 144,"SOFT" 100;color:var(--demand);}
+.deck{font-style:italic;font-size:20px;color:var(--ink-soft);margin:8px 0 32px;}
+.exams{display:grid;gap:16px;margin-top:32px;}
+.exam-card{display:block;background:var(--paper-light);border:1px solid var(--rule-soft);border-left:3px solid var(--demand);border-radius:3px;padding:24px;text-decoration:none;color:var(--ink);transition:border-color 180ms ease;}
+.exam-card:hover{border-color:var(--gold);}
+.exam-card .label{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--demand);text-transform:uppercase;margin-bottom:6px;}
+.exam-card h2{font-family:var(--display);font-variation-settings:"opsz" 72,"SOFT" 0;font-weight:700;font-size:28px;margin:0 0 8px;letter-spacing:-0.01em;}
+.exam-card .meta{font-family:var(--mono);font-size:12px;color:var(--ink-faint);letter-spacing:0.04em;}
+.exam-card p{margin:8px 0 0;font-size:15px;color:var(--ink-soft);font-style:italic;}
+footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--ink-faint);text-align:center;}
+</style>
+</head>
+<body>
+<main>
+<p class="eyebrow">ECONM-I · Practice Exams</p>
+<h1>Practice <em>before</em> the real one.</h1>
+<p class="deck">Two interactive practice exams calibrated to the real midterm and final: same shape, same difficulty range, different items drawn from the question bank. Auto-grade on multiple choice, reveal sample answers on short and long response. Saved locally as you go.</p>
+
+<div class="exams">
+  <a class="exam-card" href="midterm/">
+    <div class="label">Tool 01</div>
+    <h2>Practice Midterm</h2>
+    <div class="meta">23 items · 105 raw pts · ~90 minutes · cumulative U1 through U6</div>
+    <p>Markets and coordination, opportunity cost, welfare at intuition level, gains from trade, the Skill Benchmark.</p>
+  </a>
+  <a class="exam-card" href="final/">
+    <div class="label">Tool 02</div>
+    <h2>Practice Final</h2>
+    <div class="meta">24 items · 120 raw pts · ~2 hours · cumulative U1 through U13</div>
+    <p>The whole course: markets, growth, measurement, monetary policy, AS/AD, fiscal policy, the two-crisis capstone.</p>
+  </a>
+</div>
+
+<footer>
+Companion to ECONM-I (Principles of Macroeconomics). Not graded. Saved to your browser locally; no signup, no tracking.
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practice Final — ECONM-I</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#f4ead2; --paper-light:#fbf5e3; --paper-deep:#ead9af;
+  --ink:#1a120a; --ink-soft:#463a26; --ink-faint:#8a7654;
+  --rule:#c4a373; --rule-soft:#ddc99c;
+  --demand:#a83232; --supply:#3d5d2e; --gold:#c89933;
+  --display:"Fraunces","Iowan Old Style",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --gutter:28px; --radius:3px;
+  --motion-fast:180ms; --motion:320ms;
+  --ease:cubic-bezier(0.22,0.61,0.36,1);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--display);font-variation-settings:"opsz" 14,"SOFT" 30;
+  font-size:18px;line-height:1.6;
+  background-image:radial-gradient(circle at 30% 20%,rgba(196,163,115,0.10),transparent 55%),radial-gradient(circle at 75% 80%,rgba(168,50,50,0.06),transparent 60%);
+}
+
+/* HERO */
+header.hero{padding:60px var(--gutter) 30px;border-bottom:1px solid var(--rule);}
+.hero-inner{max-width:1000px;margin:0 auto;}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 14px;display:flex;align-items:center;gap:14px;}
+.eyebrow::before,.eyebrow::after{content:"";flex:0 0 32px;height:1px;background:var(--rule);}
+.eyebrow::after{flex:1;}
+h1{font-family:var(--display);font-variation-settings:"opsz" 144,"SOFT" 0;font-weight:800;font-size:clamp(40px,7vw,76px);line-height:0.98;letter-spacing:-0.025em;margin:0 0 12px;}
+h1 em{font-style:italic;font-variation-settings:"opsz" 144,"SOFT" 100;color:var(--demand);}
+.deck{font-style:italic;font-size:20px;color:var(--ink-soft);max-width:48ch;margin:8px 0 18px;}
+.meta{display:flex;flex-wrap:wrap;gap:18px;font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--ink-faint);margin-top:12px;}
+.meta span strong{color:var(--ink);font-weight:600;}
+
+/* SCORE BAR */
+.score-bar{position:sticky;top:0;z-index:10;background:var(--paper-deep);border-bottom:1px solid var(--rule);padding:10px var(--gutter);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;color:var(--ink);}
+.score-inner{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:18px;align-items:center;}
+.score-inner .score-cell strong{color:var(--demand);font-weight:600;}
+.score-inner .reset-btn{margin-left:auto;font-family:var(--mono);font-size:11px;background:var(--paper);border:1px solid var(--rule);border-radius:var(--radius);padding:5px 10px;cursor:pointer;color:var(--ink);}
+.score-inner .reset-btn:hover{border-color:var(--gold);}
+
+/* SECTIONS + ITEMS */
+main{max-width:1000px;margin:0 auto;padding:30px var(--gutter) 80px;}
+.section{margin-bottom:48px;}
+.section-head{margin-bottom:20px;}
+.section-head h2{font-family:var(--display);font-variation-settings:"opsz" 96,"SOFT" 0;font-weight:700;font-size:clamp(26px,3vw,34px);margin:0 0 6px;letter-spacing:-0.01em;}
+.section-lede{font-size:16px;color:var(--ink-soft);margin:0;font-style:italic;max-width:60ch;}
+
+.item{background:var(--paper-light);border:1px solid var(--rule-soft);border-left:3px solid var(--demand);border-radius:var(--radius);padding:24px;margin-bottom:20px;}
+.item-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap;}
+.item-num{display:flex;gap:10px;align-items:baseline;}
+.item-num .num-label{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--demand);}
+.item-num .pt-tag{font-family:var(--mono);font-size:11px;color:var(--ink-faint);}
+.item-tags{display:flex;gap:6px;}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:0.10em;text-transform:uppercase;background:var(--paper);border:1px solid var(--rule-soft);border-radius:100px;padding:3px 10px;color:var(--ink-soft);}
+.tag.klo{color:var(--demand);}
+.item-stem{font-family:var(--display);font-size:17px;line-height:1.55;margin:0 0 18px;color:var(--ink);}
+
+.item-interaction{margin-top:14px;}
+
+/* MCQ / TF options */
+.opts-cue{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--ink-faint);margin:0 0 8px;text-transform:uppercase;}
+.cq-options{list-style:none;padding:0;margin:0;display:grid;gap:8px;}
+.cq-options li button{width:100%;text-align:left;font-family:var(--display);font-size:16px;color:var(--ink);background:var(--paper);border:1px solid var(--rule-soft);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:border-color var(--motion-fast) var(--ease),background var(--motion-fast) var(--ease);}
+.cq-options li button:hover{border-color:var(--gold);}
+.cq-options li button.chosen-correct{background:#e6efd9;border-color:var(--supply);color:var(--supply);font-weight:600;}
+.cq-options li button.chosen-wrong{background:#f3dada;border-color:var(--demand);color:var(--demand);}
+.cq-options li button.reveal-correct{border-color:var(--supply);background:var(--paper-light);font-weight:600;}
+.cq-options li button[disabled]{cursor:default;opacity:0.92;}
+
+/* Numerical */
+.num-block{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.num-input{flex:1;min-width:200px;font-family:var(--mono);font-size:16px;padding:10px 12px;border:1px solid var(--rule-soft);border-radius:var(--radius);background:var(--paper);}
+.num-feedback{flex-basis:100%;font-style:italic;color:var(--ink-soft);font-size:15px;margin:6px 0 0;}
+.num-feedback.right{color:var(--supply);}
+.num-feedback.wrong{color:var(--demand);}
+
+/* Writing block */
+.write-block{display:flex;flex-direction:column;gap:10px;}
+.write-label{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--ink-faint);text-transform:uppercase;}
+.write-block textarea{font-family:var(--display);font-size:16px;line-height:1.5;padding:12px 14px;border:1px solid var(--rule-soft);border-radius:var(--radius);background:var(--paper);resize:vertical;min-height:140px;color:var(--ink);}
+.write-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.write-help{font-size:14px;color:var(--ink-soft);font-style:italic;}
+
+/* Buttons */
+.btn{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:var(--radius);padding:9px 14px;cursor:pointer;transition:background var(--motion-fast) var(--ease),border-color var(--motion-fast) var(--ease);}
+.btn:hover{background:#f0deb1;border-color:var(--gold);}
+.btn.primary{background:var(--demand);color:var(--paper);border-color:var(--demand);}
+.btn.primary:hover{background:#8a2828;border-color:#8a2828;}
+
+/* Reveal panels */
+.item-reveal{margin-top:14px;padding-top:14px;border-top:1px dashed var(--rule-soft);font-size:15.5px;color:var(--ink-soft);line-height:1.55;}
+.item-reveal .solution-label{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--demand);margin:14px 0 4px;}
+.item-reveal p:first-child .solution-label{margin-top:0;}
+.item-reveal ul{margin:6px 0 12px 18px;padding:0;}
+.item-reveal li{margin-bottom:4px;}
+.reveal-footer{font-style:italic;color:var(--ink-faint);margin-top:14px;}
+
+/* Item footer (resource callout) */
+.item-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--rule-soft);font-family:var(--mono);font-size:11px;letter-spacing:0.04em;color:var(--ink-faint);display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;}
+.review-eyebrow{text-transform:uppercase;letter-spacing:0.14em;color:var(--demand);}
+.review-body{font-family:var(--display);font-size:14px;font-style:italic;color:var(--ink-soft);letter-spacing:0;text-transform:none;}
+.review-body a{color:var(--demand);text-decoration:none;border-bottom:1px solid var(--rule-soft);}
+
+/* Footer colophon */
+footer.colophon{padding:40px var(--gutter);border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--ink-faint);text-align:center;background:var(--paper);}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+@media print{.score-bar{position:static;} .item-reveal{display:block!important;} .item-reveal[hidden]{display:block!important;}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">ECONM-I · Practice Final</p>
+    <h1>Practice <em>Final</em></h1>
+    <p class="deck">Calibrated to look like the real final: same shape, same difficulty range, different items drawn from the bank. Work it under conditions as close to the real thing as you can: one sitting, no notes the first pass, save the reveals for after.</p>
+    <div class="meta">
+      <span><strong>24 items</strong> · 120 raw pts</span>
+      <span><strong>about two hours</strong></span>
+      <span><strong>self-scored</strong> · saved locally, no signup</span>
+    </div>
+  </div>
+</header>
+
+<div class="score-bar" role="status" aria-live="polite">
+  <div class="score-inner">
+    <span class="score-cell">AG: <strong id="score-ag">0</strong> / 30</span>
+    <span class="score-cell">SA: <strong id="score-sa">0</strong> / 30</span>
+    <span class="score-cell">LA: <strong id="score-la">0</strong> / 60</span>
+    <span class="score-cell">Total: <strong id="score-total">0</strong> / 120</span>
+    <button type="button" class="reset-btn" id="reset-btn">Reset progress</button>
+  </div>
+</div>
+
+<main>
+
+<section class="section" data-tier="AG">
+  <header class="section-head">
+    <h2>Auto-Graded (2 pts each)</h2>
+    <p class="section-lede">Multiple choice, true/false, and numerical. These reward fast, clean reasoning about a single concept.</p>
+  </header>
+  <div class="section-items">
+    
+<article class="item" id="item-1" data-item-num="1" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 1</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-23</span>
+      <span class="tag unit">U10</span>
+    </div>
+  </header>
+  <div class="item-stem">Milton Friedman famously argued the Fed should follow a fixed rule, growing the money supply at roughly the long-run real-output growth rate every year, regardless of short-run conditions. In March 2020, when the pandemic shut down large parts of the economy, the Fed dramatically expanded its balance sheet, cut interest rates to zero, and bought trillions in assets. Which best describes how the Fed acted relative to a Friedman-style rule?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="A target rate of zero is not a 'rule' in the Friedman sense; the Friedman rule is about steady money-supply growth, not the level of interest rates.">The Fed followed a Friedman rule because a zero interest rate is itself a kind of rule about how to act.</button></li><li><button type="button" data-correct="true" data-explain="Correct. The Friedman rule says expand the money supply at a steady pace regardless of conditions. The Fed instead exercised discretion: large active intervention in response to the shock. This is the central rules-vs-discretion debate in monetary policy.">The Fed exercised discretion, departing from a constant-growth-rule path because the shock required active response.</button></li><li><button type="button" data-correct="false" data-explain="The Fed has multiple tools (open-market operations, reserve requirements, IOER) for influencing the money supply. The Friedman rule presumes they do.">The Fed cannot follow a Friedman rule because it does not directly control the money supply, only the policy rate.</button></li><li><button type="button" data-correct="false" data-explain="The distinction is the central rules-vs-discretion debate in monetary economics and is empirically meaningful — Volcker's 1979-82 disinflation is often cited as closer to rule-following, while 2008 and 2020 are textbook discretion.">A Friedman rule and discretion are equivalent in practice; the rules-vs-discretion distinction is purely theoretical.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U10 — Money, the Fed, and Exchange Rates</strong> · paired video: <a href="https://www.youtube.com/watch?v=sbvAAezbCKU" target="_blank" rel="noopener">What Do Banks Do? (4:32)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-2" data-item-num="2" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 2</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-15</span>
+      <span class="tag unit">U11</span>
+    </div>
+  </header>
+  <div class="item-stem">Congress raises personal income taxes substantially. Households have less after-tax income to spend; velocity growth falls. Holding everything else constant, the most likely short-run effect in the dynamic AS/AD model is:</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="A tax hike reduces spending growth, not raises it. AD shifts inward, not outward.">AD shifts outward; real growth rises; inflation rises.</button></li><li><button type="button" data-correct="true" data-explain="Correct. A tax hike reduces households' spending, which lowers %ΔV. Spending growth (%ΔM + %ΔV) falls. AD shifts inward. The new short-run equilibrium has lower real growth and lower inflation. This is the standard demand-side fiscal contraction in the dynamic model.">AD shifts inward; real growth falls; inflation falls.</button></li><li><button type="button" data-correct="false" data-explain="LRAS shifts on real shocks (capacity-affecting events like oil shocks or productivity changes), not on tax changes that operate through spending decisions. A tax hike is a demand-side event.">LRAS shifts left; real growth falls; inflation rises.</button></li><li><button type="button" data-correct="false" data-explain="Wrong direction and wrong curve. A tax hike is contractionary on the demand side; LRAS does not move from a tax hike unless the tax structure changes incentives to invest or work in ways that affect long-run capacity.">LRAS shifts right; real growth rises; inflation falls.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>Personal income taxes work through household disposable income. Raising them cuts after-tax income, which lowers spending growth via the velocity channel (%ΔV falls). AD shifts inward. New short-run equilibrium: lower real growth, lower inflation. This is the standard fiscal-contraction channel in the dynamic AS/AD model.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U11 — Aggregate Demand and Aggregate Supply</strong> · paired video: <a href="https://www.youtube.com/watch?v=vnUo82ZCo5s" target="_blank" rel="noopener">Intro to Business Fluctuations (2:58)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-3" data-item-num="3" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 3</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-24</span>
+      <span class="tag unit">U12</span>
+    </div>
+  </header>
+  <div class="item-stem">Through the AS/AD framework, the 2007-2009 Great Recession is best diagnosed as primarily:</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="true" data-explain="Correct. The financial crisis drove a sharp fall in C and I (households deleveraged, banks stopped lending, investment collapsed). AD shifted left. Output fell well below potential GDP and inflation was low.">A negative aggregate demand shock</button></li><li><button type="button" data-correct="false" data-explain="The shock was on the demand side; SRAS was not the main story in 2008.">A negative aggregate supply shock</button></li><li><button type="button" data-correct="false" data-explain="The crisis featured falling output and low inflation; a positive AD shock would have raised both.">A positive aggregate demand shock</button></li><li><button type="button" data-correct="false" data-explain="A positive supply shock would have raised output and lowered prices; that is the wrong pattern.">A positive aggregate supply shock</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>The 2008 Great Recession is the canonical modern negative AD shock. Housing-price collapse, financial-sector fragility, credit crunch, C and I fall. AD shifts left. Standard policy response: expansionary fiscal (ARRA) plus aggressive monetary easing.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U12 — Fiscal Policy + Two-Crisis Capstone</strong> · paired video: <a href="https://www.youtube.com/watch?v=m6JLCHwNdT4" target="_blank" rel="noopener">Understanding the Great Depression (8:50)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-4" data-item-num="4" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 4</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-9</span>
+      <span class="tag unit">U13</span>
+    </div>
+  </header>
+  <div class="item-stem">A city imposes a maximum legal price on gasoline that is well below the current market-clearing price. Holding everything else fixed, what should we predict?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="true" data-explain="Correct. A price ceiling below equilibrium produces a shortage: buyers want more at the lower price than sellers are willing to provide, so lines, rationing, or black markets appear.">A shortage of gasoline; quantity demanded exceeds quantity supplied at the cap.</button></li><li><button type="button" data-correct="false" data-explain="A surplus requires the price to be above equilibrium. Below equilibrium produces the opposite: a shortage.">A surplus of gasoline; the cap forces sellers to dump excess fuel at the cap.</button></li><li><button type="button" data-correct="false" data-explain="Quantity is determined by what sellers will supply at the capped price, which is less than the equilibrium quantity. The market does not clear at the cap.">No effect on quantity; price caps only change who keeps the consumer surplus.</button></li><li><button type="button" data-correct="false" data-explain="A binding price ceiling prevents the market from clearing; that is the whole point of a ceiling below equilibrium.">Equilibrium at the capped price; the law makes buyers and sellers agree to clear.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U13 — Cumulative Review</strong></span>
+  </footer>
+</article>
+
+<article class="item" id="item-5" data-item-num="5" data-tier="AG" data-points="2" data-qtype="numerical">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 5</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-16</span>
+      <span class="tag unit">U13</span>
+    </div>
+  </header>
+  <div class="item-stem">A country's economy grows real GDP per capita at 7% per year. According to the rule of 70, approximately how many years will it take for real GDP per capita to double? Answer in whole years.</div>
+  <div class="item-interaction">
+    <div class="num-block"><input type="text" inputmode="decimal" class="num-input" id="item-5-num" placeholder="Enter your answer"><button type="button" class="num-check btn" data-val="10.0">Check</button><p class="num-feedback" aria-live="polite"></p></div><script>window.__NUM["item-5"] = 10.0;</script>
+  </div>
+  <div class="item-reveal reveal-num" hidden>
+    <p class="solution-label">Why:</p><p>Doubling time = $70 / 7 = 10$ years.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U13 — Cumulative Review</strong></span>
+  </footer>
+</article>
+
+<article class="item" id="item-6" data-item-num="6" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 6</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-28</span>
+      <span class="tag unit">U13</span>
+    </div>
+  </header>
+  <div class="item-stem">The Federal Reserve buys $50 billion in Treasury securities from primary dealers through an open-market operation. Holding everything else fixed, what is the immediate effect on bank reserves and the money supply?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="That is the effect of selling Treasuries, not buying them. The Fed sells in a tightening operation.">Bank reserves fall; the money supply contracts.</button></li><li><button type="button" data-correct="true" data-explain="Correct. When the Fed buys Treasuries, it credits the selling bank's reserve account. Reserves rise, and through fractional-reserve lending the broader money supply expands.">Bank reserves rise; the money supply expands.</button></li><li><button type="button" data-correct="false" data-explain="Open-market purchases move reserves first; the funds rate response is the second-order effect on the price of reserves.">Bank reserves are unchanged; only the federal funds rate changes.</button></li><li><button type="button" data-correct="false" data-explain="Reserves and money supply move in the same direction in a standard open-market operation. Splitting them as opposite directions is incoherent.">Bank reserves rise; the money supply contracts.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U13 — Cumulative Review</strong></span>
+  </footer>
+</article>
+
+<article class="item" id="item-7" data-item-num="7" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 7</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-3</span>
+      <span class="tag unit">U13</span>
+    </div>
+  </header>
+  <div class="item-stem">Marcus is offered three ways to spend his Saturday afternoon: a paid catering shift worth $150, a friend's birthday brunch he values at $80, or a freelance writing job worth $120. He takes the catering shift. What is the opportunity cost of the catering shift?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="Opportunity cost is the value of the next-best alternative forgone. The $80 brunch is not the next-best alternative; the $120 freelance job is.">$80</button></li><li><button type="button" data-correct="true" data-explain="Correct. Of the two foregone options, the freelance job ($120) is more valuable than the brunch ($80). The opportunity cost is the value of the most valuable forgone option only.">$120</button></li><li><button type="button" data-correct="false" data-explain="Opportunity cost is not the sum of all foregone options; it is the value of the single next-best alternative.">$200</button></li><li><button type="button" data-correct="false" data-explain="Including the value of the chosen option in the cost would be double-counting. The chosen option's value is the benefit, not the cost.">$350</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U13 — Cumulative Review</strong></span>
+  </footer>
+</article>
+
+<article class="item" id="item-8" data-item-num="8" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 8</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-1</span>
+      <span class="tag unit">U2</span>
+    </div>
+  </header>
+  <div class="item-stem">Which of the following best describes what economists mean by scarcity?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="This describes a short-run shortage, which is different from scarcity. Scarcity is a permanent fact about resources and wants, not a temporary disruption.">A temporary shortage of a particular good caused by a recent disruption such as a hurricane, a strike, or a port closure.</button></li><li><button type="button" data-correct="true" data-explain="Correct. Scarcity in the economic sense is the gap between limited resources (time, raw materials, labor, capital) and effectively unlimited wants. It is the condition that forces individuals and societies to make choices about how to use what they have. It is not the same as poverty or a temporary shortage.">The condition that resources are limited while wants for what those resources can produce are essentially unlimited.</button></li><li><button type="button" data-correct="false" data-explain="This describes high prices or limited affordability, not scarcity. Even goods that are cheap and abundant are scarce in the economic sense, because resources used to make them have alternative uses.">A market situation in which the price of a good has risen so high that most ordinary buyers can no longer afford to buy it.</button></li><li><button type="button" data-correct="false" data-explain="This describes famine or material deprivation, not scarcity. Scarcity exists even in rich societies, because no society has enough resources to satisfy every want of every member.">A historical period in which a particular country lacked food or shelter for a meaningful share of its general population.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U2 — Markets and Coordination</strong> · paired video: <a href="https://www.youtube.com/watch?v=kUPm2tMCbGE" target="_blank" rel="noopener">The Demand Curve (MRU-Micro) (3:31)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-9" data-item-num="9" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 9</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-37</span>
+      <span class="tag unit">U3</span>
+    </div>
+  </header>
+  <div class="item-stem">An economy enters a recession. Unemployment rises and many factories sit idle. On a PPF diagram, the economy's production point during the recession moves:</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="true" data-explain="Correct. Idle resources mean the economy is producing less than it could with the resources it has. That is the definition of an inside-the-frontier point.">From a point on the frontier to a point inside the frontier.</button></li><li><button type="button" data-correct="false" data-explain="Outside the frontier is unachievable with current resources. A recession cannot put the economy at a point it could not reach in the first place.">From a point on the frontier to a point outside the frontier.</button></li><li><button type="button" data-correct="false" data-explain="A recession does not destroy resources or technology. The frontier itself stays where it was. What changes is whether resources are being used.">The frontier itself shifts inward, but the production point stays on it.</button></li><li><button type="button" data-correct="false" data-explain="An outward frontier shift describes economic growth. Recession is the opposite picture.">The frontier itself shifts outward, but the production point moves to an inside point.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>A recession is the classic inside-the-frontier case. The PPF itself does not move. Resources still exist, technology has not changed. They are just not being used. When the recession ends, the economy returns to the same frontier it had before.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U3 — Thinking Like an Economist + PPF</strong> · paired video: <a href="https://www.youtube.com/watch?v=uorrlWJ23Mg" target="_blank" rel="noopener">Opportunity Cost and Tradeoffs (MRU-Micro) (4:38)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-10" data-item-num="10" data-tier="AG" data-points="2" data-qtype="numerical">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 10</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-11</span>
+      <span class="tag unit">U4</span>
+    </div>
+  </header>
+  <div class="item-stem">A farmer would be willing to sell a bushel of apples for as little as $18 (their cost). At the local farmers market, the bushel sells for $30. What is the farmer's producer surplus on this trade, in dollars? Enter a number.</div>
+  <div class="item-interaction">
+    <div class="num-block"><input type="text" inputmode="decimal" class="num-input" id="item-10-num" placeholder="Enter your answer"><button type="button" class="num-check btn" data-val="12.0">Check</button><p class="num-feedback" aria-live="polite"></p></div><script>window.__NUM["item-10"] = 12.0;</script>
+  </div>
+  <div class="item-reveal reveal-num" hidden>
+    <p class="solution-label">Why:</p><p>Producer surplus = price received minus minimum willingness to accept = $30 - $18 = $12.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U4 — Welfare and Government Policy</strong> · paired video: <a href="https://www.youtube.com/watch?v=oL20S7c0ZJE" target="_blank" rel="noopener">Consumer Surplus (MRU-Micro) (2:56)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-11" data-item-num="11" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 11</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-12</span>
+      <span class="tag unit">U4</span>
+    </div>
+  </header>
+  <div class="item-stem">A binding price ceiling (a legal price cap set below the equilibrium price) generally produces which of the following effects?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="true" data-explain="Correct. A binding price ceiling causes quantity demanded to exceed quantity supplied (shortage) and destroys some of the gains from trade (deadweight loss).">A shortage of the good and a reduction in total surplus</button></li><li><button type="button" data-correct="false" data-explain="A surplus arises from a binding price floor, not a price ceiling; and total surplus shrinks, not grows.">A surplus of the good and an increase in total surplus</button></li><li><button type="button" data-correct="false" data-explain="A binding price ceiling reduces quantity supplied; quantity traded falls.">No change in quantity traded as long as the ceiling is enforced</button></li><li><button type="button" data-correct="false" data-explain="A binding price ceiling reduces quantity transacted and destroys some gains from trade entirely. It does not just shuffle surplus between groups.">A pure redistribution of surplus from sellers to buyers with no change in total surplus</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>A binding price ceiling causes quantity supplied to fall below quantity demanded (a shortage) and destroys gains from trade that would have been made above the ceiling (deadweight loss).</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U4 — Welfare and Government Policy</strong> · paired video: <a href="https://www.youtube.com/watch?v=oL20S7c0ZJE" target="_blank" rel="noopener">Consumer Surplus (MRU-Micro) (2:56)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-12" data-item-num="12" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 12</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-33</span>
+      <span class="tag unit">U5</span>
+    </div>
+  </header>
+  <div class="item-stem">In Canada, one worker can produce 20 barrels of oil or 40 tons of lumber. In Venezuela, one worker can produce 60 barrels of oil or 30 tons of lumber. Which country has the comparative advantage in oil, and which in lumber?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="This violates the logic of comparative advantage: a country always has CA in something unless opportunity costs are identical.">Canada has comparative advantage in both; Venezuela in neither</button></li><li><button type="button" data-correct="false" data-explain="This violates the logic of comparative advantage.">Venezuela has comparative advantage in both; Canada in neither</button></li><li><button type="button" data-correct="false" data-explain="This reverses the opportunity costs. Venezuela gives up less lumber per barrel of oil (0.5 vs 2).">Canada has comparative advantage in oil; Venezuela in lumber</button></li><li><button type="button" data-correct="true" data-explain="Correct. In Canada, 1 oil costs 2 lumber. In Venezuela, 1 oil costs 0.5 lumber. Venezuela gives up less lumber per barrel of oil; Canada gives up less oil per ton of lumber.">Venezuela has comparative advantage in oil; Canada in lumber</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>Canada: 1 oil = 2 lumber and 1 lumber = 0.5 oil. Venezuela: 1 oil = 0.5 lumber and 1 lumber = 2 oil. Lower opportunity cost wins. Venezuela has CA in oil (0.5 lumber &lt; 2 lumber). Canada has CA in lumber (0.5 oil &lt; 2 oil).</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U5 — Gains from Trade</strong> · paired video: <a href="https://www.youtube.com/watch?v=8GsAwczbJp4" target="_blank" rel="noopener">Trade: Engine of Specialization (MRU-Micro) (6:30)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-13" data-item-num="13" data-tier="AG" data-points="2" data-qtype="numerical">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 13</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-7</span>
+      <span class="tag unit">U8</span>
+    </div>
+  </header>
+  <div class="item-stem">In an economy, 7 million people are unemployed and 143 million are employed. What is the unemployment rate, in percent? Round to one decimal place.</div>
+  <div class="item-interaction">
+    <div class="num-block"><input type="text" inputmode="decimal" class="num-input" id="item-13-num" placeholder="Enter your answer"><button type="button" class="num-check btn" data-val="4.7">Check</button><p class="num-feedback" aria-live="polite"></p></div><script>window.__NUM["item-13"] = 4.7;</script>
+  </div>
+  <div class="item-reveal reveal-num" hidden>
+    <p class="solution-label">Why:</p><p>Labor force = employed + unemployed = 143 + 7 = 150 million. Unemployment rate = 7/150 × 100 = 4.667, rounded to 4.7 percent.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U8 — Measuring the Economy</strong> · paired video: <a href="https://www.youtube.com/watch?v=mjJmo5mN5yA" target="_blank" rel="noopener">What is GDP? (4:36)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-14" data-item-num="14" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 14</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-25</span>
+      <span class="tag unit">U9</span>
+    </div>
+  </header>
+  <div class="item-stem">Amazon installs new warehouse robots that allow the same number of workers to pack twice as many orders per hour as before. Which of the following best describes what has changed?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="true" data-explain="Correct. Labor productivity = output per hour of labor. When the same workers pack twice as many orders, output per hour doubled. The mechanism (new capital) is part of why productivity rose; the productivity itself is the output-per-hour ratio, which is now higher.">Labor productivity has risen because the same labor input now produces more output.</button></li><li><button type="button" data-correct="false" data-explain="Productivity is measured per worker (or per hour), not by counting workers. The same workers producing more means productivity rose.">Labor productivity is unchanged because the number of workers did not change.</button></li><li><button type="button" data-correct="false" data-explain="Robots replacing some tasks raised output per remaining worker. That is a productivity gain, not a loss.">Labor productivity has fallen because the robots displaced human work.</button></li><li><button type="button" data-correct="false" data-explain="Labor productivity is exactly what is changing here: output per hour of labor doubled. Capital and labor productivity often rise together when new capital is deployed.">Labor productivity is irrelevant here; only capital productivity has changed.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U9 — Why Countries Grow</strong> · paired video: <a href="https://www.youtube.com/watch?v=PzAr_mL0Qd8" target="_blank" rel="noopener">Basic Facts of Wealth (4:28)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-15" data-item-num="15" data-tier="AG" data-points="2" data-qtype="numerical">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 15</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-30</span>
+      <span class="tag unit">U9</span>
+    </div>
+  </header>
+  <div class="item-stem">A country grows real GDP per capita at 3 percent per year. Using the Rule of 70, approximately how many years does it take for living standards to double?</div>
+  <div class="item-interaction">
+    <div class="num-block"><input type="text" inputmode="decimal" class="num-input" id="item-15-num" placeholder="Enter your answer"><button type="button" class="num-check btn" data-val="23.0">Check</button><p class="num-feedback" aria-live="polite"></p></div><script>window.__NUM["item-15"] = 23.0;</script>
+  </div>
+  <div class="item-reveal reveal-num" hidden>
+    <p class="solution-label">Why:</p><p>Rule of 70: doubling time is about 70 / growth rate. 70 / 3 is about 23.3 years. Accept 23 or 24.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U9 — Why Countries Grow</strong> · paired video: <a href="https://www.youtube.com/watch?v=PzAr_mL0Qd8" target="_blank" rel="noopener">Basic Facts of Wealth (4:28)</a></span>
+  </footer>
+</article>
+  </div>
+</section>
+<section class="section" data-tier="SA">
+  <header class="section-head">
+    <h2>Short Answer (6 pts each)</h2>
+    <p class="section-lede">Two-to-three-paragraph responses. Each item asks you to identify a framework, apply it, and name a limitation or complication. Show your work on any quantitative item.</p>
+  </header>
+  <div class="section-items">
+    
+<article class="item" id="item-16" data-item-num="16" data-tier="SA" data-points="6" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 16</span><span class="pt-tag">6 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-15</span>
+      <span class="tag unit">U11</span>
+    </div>
+  </header>
+  <div class="item-stem">The textbook notes that US presidents must be careful in public statements about the economy: pessimistic talk can lower confidence, reduce household and firm spending, lower velocity growth, shift AD inward, and contribute to causing the recession the president warned about. Using the dynamic AS/AD model, walk through the mechanism step by step. Then contrast this Keynesian (demand-driven) view with the classical (supply-determined) view, in which output is determined by real factors regardless of demand.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-16-text" class="write-label">Your response</label><textarea id="item-16-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>A pessimistic public statement lowers consumer and business confidence. Households expect harder times and cut spending; firms expect lower future revenue and postpone investment. Both effects lower the velocity of money (%ΔV falls). By the identity %ΔM + %ΔV = π + Yr, spending growth falls. AD shifts inward. The new short-run equilibrium has lower real growth and lower inflation. Unemployment rises. The recession the president warned about has happened in part because of the warning. This is the demand-driven (Keynesian) story: nominal spending decisions in the present can drive the real economy's growth rate in the short run because of sticky wages and money illusion. The classical (Say's law) view holds that supply creates its own demand and that real output is determined by the economy's real productive capacity (LRAS), not by spending decisions. In the classical world, a confidence drop that lowered AD would only lower the price level (or inflation), not real output: the economy would still grow at its potential rate. The dynamic AS/AD model splits the difference. In the long run, LRAS dominates: the economy grows at its potential growth rate regardless of demand. In the short run, sticky wages and money illusion mean that AD shifts can move real growth, so the Keynesian story is right for the time horizon over which contracts are sticky. Both views are present in the same diagram, on different time horizons.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>Mechanism: confidence drops, %ΔV falls, AD shifts inward, real growth + inflation both fall</li><li>Identifies as Keynesian (demand-driven, sticky-wages-relevant)</li><li>Contrasts with classical Say's law: LRAS determines output, AD shifts only affect inflation</li><li>Synthesis: short-run Keynesian, long-run classical, both in the same diagram</li></ul><p class="solution-label">Grading notes:</p><p>3 pts for the mechanism walk-through (1 pt confidence to spending, 1 pt to AD-left, 1 pt to equilibrium effect). 1 pt for noting the asymmetric effect when starting in flat SRAS. 2 pts for correctly identifying as Keynesian and contrasting with Say's law.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U11 — Aggregate Demand and Aggregate Supply</strong> · paired video: <a href="https://www.youtube.com/watch?v=vnUo82ZCo5s" target="_blank" rel="noopener">Intro to Business Fluctuations (2:58)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-17" data-item-num="17" data-tier="SA" data-points="6" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 17</span><span class="pt-tag">6 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-24</span>
+      <span class="tag unit">U12</span>
+    </div>
+  </header>
+  <div class="item-stem">It is mid-2022. Inflation is running near 9% year over year, the highest in 40 years. The Fed has begun raising its target interest rate aggressively. Using the AS/AD framework, explain why a Fed seeking to bring inflation down would pursue contractionary monetary policy in this setting, and what tradeoff it accepts in doing so. (5-7 sentences)</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-17-text" class="write-label">Your response</label><textarea id="item-17-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>Contractionary monetary policy raises interest rates, which reduces interest-sensitive consumption (durables, housing) and investment. Aggregate demand shifts left. Because the AD impulse from 2020-21 stimulus was a major contributor to the inflation, reversing that impulse is a direct way to push the price level back down. The tradeoff: shifting AD left also reduces real output and raises unemployment in the short run. If the SRAS curve is steep at current output levels (close to potential), most of the AD pullback shows up as lower prices and only modestly lower output, a relatively painless disinflation. If SRAS is flat (lots of slack), the same pullback would cost more output for less inflation reduction. The Fed's bet in 2022 was that the labor market was tight enough that AD compression would mostly hit prices, not jobs.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>contractionary monetary policy = higher rates, C and I fall, AD left</li><li>AD impulse was a major driver of 2021-23 inflation, so reversing it makes sense</li><li>tradeoff: AD left also reduces output and raises unemployment</li><li>outcome depends on SRAS slope at current output</li><li>the Fed working bet: tight labor market means mostly price effect</li></ul><p class="solution-label">Grading notes:</p><p>1 pt for the mechanism (rates up, C and I down, AD left); 1 pt for the diagnostic link to the AD source of inflation; 2 pts for the output/unemployment tradeoff; 2 pts for the SRAS-slope conditional; 1 pt for naming the Fed working assumption.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U12 — Fiscal Policy + Two-Crisis Capstone</strong> · paired video: <a href="https://www.youtube.com/watch?v=m6JLCHwNdT4" target="_blank" rel="noopener">Understanding the Great Depression (8:50)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-18" data-item-num="18" data-tier="SA" data-points="6" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 18</span><span class="pt-tag">6 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-9</span>
+      <span class="tag unit">U13</span>
+    </div>
+  </header>
+  <div class="item-stem">A global semiconductor shortage in 2021 prevented auto manufacturers from producing as many new cars as they normally would. Working the four-step move from U2 (what changed, who is affected, in which direction, what happens to the equilibrium), predict in 4 to 6 sentences what happens to the equilibrium price and quantity of new cars in the United States.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-18-text" class="write-label">Your response</label><textarea id="item-18-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>identifies the chip shortage as an input shock (not a demand or price change)|names sellers / supply side as affected|states leftward direction at every price|states higher P and lower Q at the new equilibrium</p><p class="solution-label">Key points an answer must hit:</p><ul><li>1 pt for identifying the input-cost mechanism; 1 pt for naming the supply side; 2 pts for direction reasoning; 2 pts for the correct equilibrium prediction.</li></ul><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U13 — Cumulative Review</strong></span>
+  </footer>
+</article>
+
+<article class="item" id="item-19" data-item-num="19" data-tier="SA" data-points="6" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 19</span><span class="pt-tag">6 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-3</span>
+      <span class="tag unit">U3</span>
+    </div>
+  </header>
+  <div class="item-stem">An airline has spent $2 million on advertising and gate-leasing fees to launch a new route between two mid-sized cities. After three months, ticket revenue on each flight averages $18,000 and the cost of flying each flight (fuel, crew, cleaning) averages $15,000. An executive argues the route should be cancelled because the $2 million launch cost has not been recovered. In 4 to 6 sentences, explain whether the marginal decision rule supports the executive's reasoning. Name what is sunk, what is marginal, and which numbers belong in the decision.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-19-text" class="write-label">Your response</label><textarea id="item-19-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>$2 million identified as sunk|marginal revenue vs marginal cost framing|MR $18,000 vs MC $15,000 comparison|correct conclusion: continue the route|the executive's error named (sunk cost fallacy or equivalent)</p><p class="solution-label">Key points an answer must hit:</p><ul><li>1 pt for identifying the $2 million as sunk; 2 pts for naming the marginal comparison; 1 pt for the correct numerical comparison; 1 pt for the correct conclusion; 1 pt for naming the executive's error.</li></ul><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U3 — Thinking Like an Economist + PPF</strong> · paired video: <a href="https://www.youtube.com/watch?v=uorrlWJ23Mg" target="_blank" rel="noopener">Opportunity Cost and Tradeoffs (MRU-Micro) (4:38)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-20" data-item-num="20" data-tier="SA" data-points="6" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 20</span><span class="pt-tag">6 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-12</span>
+      <span class="tag unit">U6</span>
+    </div>
+  </header>
+  <div class="item-stem">Cigarette buyers as a group have few close substitutes for cigarettes (nicotine addiction). Cigarette sellers face active competition from other tobacco firms and can shift product lines. A $1-per-pack tax is imposed. Using the U4 &quot;who can walk away?&quot; intuition, predict which side bears more of the burden and explain why. Then predict whether the tax will raise much revenue, and explain. (4-6 sentences)</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-20-text" class="write-label">Your response</label><textarea id="item-20-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>Buyers bear the burden because they cannot walk away (addiction). Sellers can substitute product lines. Revenue is meaningful because quantity falls only modestly.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>buyers-cannot-walk-away</li><li>sellers-can-walk-away</li><li>buyers-bear-burden</li><li>quantity-falls-only-modestly</li><li>revenue-raised</li><li>addiction-mechanism</li></ul><p class="solution-label">Grading notes:</p><p>2 pts: correct identification (buyers bear burden). 2 pts: explanation via who-can-walk-away. 1 pt: prediction that revenue is meaningful. 1 pt: explanation that quantity falls only modestly.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U6 — Skill Benchmark: Market Analysis</strong></span>
+  </footer>
+</article>
+  </div>
+</section>
+<section class="section" data-tier="LA">
+  <header class="section-head">
+    <h2>Long Answer (15 pts each)</h2>
+    <p class="section-lede">Roughly 400-word responses to a multi-part scenario integrating two or three ideas across units.</p>
+  </header>
+  <div class="section-items">
+    
+<article class="item" id="item-21" data-item-num="21" data-tier="LA" data-points="15" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 21</span><span class="pt-tag">15 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-15</span>
+      <span class="tag unit">U12</span>
+    </div>
+  </header>
+  <div class="item-stem">Fiscal policy (Congress and the Treasury) and monetary policy (the Federal Reserve) can pull in the same direction or work against each other. Write a structured essay (350-500 words) covering: (1) Define one historical example where fiscal and monetary policy worked together (the 2008-09 response is acceptable). (2) Define one historical example where fiscal expansion was partially neutralized by monetary tightening (&quot;monetary offset&quot;). (3) Explain why coordination matters in the AS/AD framework. (4) Identify one structural reason genuine coordination is difficult in the US system.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-21-text" class="write-label">Your response</label><textarea id="item-21-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>The 2008-09 response is a clear case of fiscal and monetary policy pulling together. Congress passed ARRA: roughly $830 billion of tax cuts, transfers, and direct spending, all aimed at pushing AD right. At the same time, the Federal Reserve cut the federal funds rate to near zero and began large-scale asset purchases (quantitative easing), also aimed at pushing AD right through the interest-rate and asset-price channels. Both tools, same direction. The combined effect was a larger rightward AD shift than either could have produced alone, and the response was matched to the diagnosis (an AD-collapse recession in the flat region of SRAS).
+
+The early-1980s case is the canonical example of monetary offset. Reagan-era fiscal policy ran large deficits through tax cuts and defense spending, which on its own would have pushed AD right. Paul Volcker's Fed was simultaneously running the tightest monetary policy in modern U.S. history, raising the federal funds rate above 19 percent at one point to crush inflation expectations that had become un-anchored in the 1970s. Monetary contraction reversed a large part of the fiscal AD push. The net effect on AD was much smaller than the fiscal expansion alone would suggest. The deficits drove real interest rates very high, crowded out interest-sensitive investment, and contributed to the early-1980s recession that finally broke inflation.
+
+In the AS/AD framework, coordination matters because both fiscal and monetary policy act primarily on the AD curve. When they push together, the AD shift is the sum (roughly) of the two pushes. When they push apart, much of one cancels the other, and the policy mix mostly affects the composition of demand (more government, less interest-sensitive private investment) rather than its total.
+
+Genuine coordination is difficult in the U.S. system by design. The Federal Reserve is independent: the president appoints governors to 14-year terms and the Federal Reserve Act insulates the Board from direct political instruction. The reason for that independence is historical and important. A Fed that takes orders from Congress is a Fed that monetizes debt when convenient, which produces the kind of inflation-expectation un-anchoring that the 1970s demonstrated. The cost of independence is that fiscal and monetary policy are pursued by two institutions answering to different mandates and different time horizons. Coordination happens through communication and shared analytical frameworks, not through a single decision-maker, and during disagreements the result is the kind of offset the early 1980s showed.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>2008-09 = coordinated expansionary fiscal plus monetary, both shifted AD right</li><li>early-1980s = fiscal expansion (Reagan) plus monetary contraction (Volcker), monetary offset</li><li>in AS/AD: both tools move AD; coordination amplifies, conflict cancels</li><li>Fed independence is by design (insulated from political pressure)</li><li>coordination is informal at best in the US</li></ul><p class="solution-label">Grading notes:</p><p>Out of 15 pts: 3 pts for the coordinated example with mechanism; 3 pts for the monetary-offset example with mechanism; 3 pts for the AS/AD framing of why coordination matters; 3 pts for the structural reason (Fed independence); 3 pts for clarity and synthesis.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U12 — Fiscal Policy + Two-Crisis Capstone</strong> · paired video: <a href="https://www.youtube.com/watch?v=m6JLCHwNdT4" target="_blank" rel="noopener">Understanding the Great Depression (8:50)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-22" data-item-num="22" data-tier="LA" data-points="15" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 22</span><span class="pt-tag">15 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-28</span>
+      <span class="tag unit">U13</span>
+    </div>
+  </header>
+  <div class="item-stem">Between early 2021 and mid-2023, U.S. CPI inflation rose from roughly 1.4 percent (Jan 2021) to a peak above 9 percent (June 2022), then fell back to about 3 percent (mid-2023). Over the same period the Federal Reserve raised the federal funds rate from near zero (early 2022) to over 5 percent (mid-2023). The U.S. economy entered 2021 with roughly $5 trillion in cumulative pandemic fiscal support already disbursed or committed, household savings well above historical norms, and a partially-recovered supply side (shipping backlogs, semiconductor shortages, labor-force participation still below pre-pandemic levels). Headline unemployment was below 4 percent through most of 2022 and 2023, even as inflation peaked.<br><br>Write a response of roughly 400 to 600 words. Address all four parts. Number your responses.<br><br>1. Diagnose the macroeconomic shape of the 2021-23 episode using the AS/AD framework from U11. Specifically: was this primarily a demand-side story, a supply-side story, or both? Cite at least two pieces of evidence from the scenario in support of your diagnosis.<br>2. Walk through the Fed's tightening cycle from your U10 monetary-policy framework. Why does raising the federal funds rate work to reduce inflation? Trace the transmission mechanism in three to four steps, and explain why monetary policy operates with a lag.<br>3. A common critique at the time held that the 2021-23 inflation was 'purely supply-driven' (shipping containers, oil prices, labor shortages) and that Fed tightening was therefore an unnecessary policy error that would only produce a recession. Evaluate this critique using your diagnosis from part 1 and the observed outcome (inflation fell, unemployment did not spike). Where does the critique have a point, and where does it fail?<br>4. Compare the 2021-23 episode to the 2008-09 episode (which you may know from U12). The two events triggered very different policy responses (loose monetary + fiscal in 2008-09; tight monetary + still-loose fiscal in 2021-23). Articulate, in two or three sentences, what changed between the two episodes that justified the opposite policy posture.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-22-text" class="write-label">Your response</label><textarea id="item-22-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>(1) The 2021-23 inflation was <em>both</em> a demand-side and a supply-side story, with the demand side more empirically important than many supply-only accounts admitted. Demand-side evidence: $5 trillion in cumulative fiscal support during 2020-21 directly raised household nominal spending power; pent-up savings unwound rapidly as the economy reopened; headline unemployment fell below 4 percent (a tight labor market is incompatible with a demand shortfall). Supply-side evidence: shipping backlogs and semiconductor shortages constrained aggregate supply through 2021-22; labor-force participation remained depressed; energy prices spiked in early 2022 (Russia's invasion of Ukraine). The clean AS/AD diagnosis is a <em>rightward AD shift</em> into a <em>constrained SRAS</em>: demand surged into a supply curve that could not fully respond, producing price increases much larger than the corresponding quantity increases. This is the mirror image of 2008-09, where AD collapsed against a relatively undamaged SRAS.
+
+(2) The Fed's tightening transmits through (a) the federal funds rate rises, raising the cost of overnight bank borrowing; (b) banks pass higher rates through to consumer and business loans (mortgages, credit cards, business credit lines, corporate bonds); (c) higher borrowing costs reduce interest-sensitive spending — housing demand falls first, business capex follows, durable consumer goods slow; (d) the slowdown in spending shifts AD leftward, easing the demand-side pressure on prices. The lag (typically 12 to 18 months from rate move to inflation response) exists because households and firms revise contracts, leases, and capital plans on their own timetable; price setters do not instantly respond to a single Fed meeting. This is why the Fed started raising rates in early 2022 and inflation did not peak until mid-2022 — the rate hikes did not move prices instantly, they pulled forward decisions across the economy.
+
+(3) The 'purely supply-driven' critique has a partial point but ultimately fails. It is correct that supply shocks (shipping, oil, labor) contributed real upward pressure on prices, and that a Fed that tried to fully crush a supply-shock-driven inflation would have to engineer a deep recession to do so. But the critique fails on the diagnostic side: the simultaneous evidence of a very tight labor market, large fiscal support, and a price level rising across a broad range of goods (not just shipping- or energy-dependent ones) is the signature of an AD-side component. The outcome confirms the diagnosis: the Fed tightened and inflation came down without unemployment spiking — exactly what the AS/AD model predicts when AD is moved leftward from an over-stimulated starting point into a still-improving supply environment. Had the inflation been purely supply, the tightening would have had to break the labor market to break the inflation; that did not happen.
+
+(4) The two episodes called for opposite policy postures because they were <em>opposite</em> AS/AD shocks. 2008-09 was a collapse in aggregate demand into a relatively healthy supply side — the right response was to push AD back to the right (loose money, large fiscal). 2021-23 was the reverse — excessive AD pushed into a constrained SRAS, with the right response being to ease AD back to the left (tight money) while letting the supply side heal. The same model (AS/AD), the same toolkit (monetary + fiscal), opposite shocks, opposite policy. The honest lesson is that macro policy is not 'loose is always good' or 'tight is always good' — the right move depends on the diagnosis.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>(1) Correctly identifies 2021-23 as a <em>both-sides</em> shock with demand-side empirically dominant</li><li>(1) Cites tight labor market + fiscal scale on demand side; shipping/semis/oil/labor on supply side</li><li>(1) AS/AD diagnosis: rightward AD into constrained SRAS</li><li>(2) Three- or four-step transmission: fed funds → bank rates → consumer/business borrowing → interest-sensitive spending → AD shift</li><li>(2) Explains the 12-18 month lag mechanically (contract/decision revision timing)</li><li>(3) Acknowledges supply-side contribution but argues critique fails on tight-labor-market and broad-based-prices evidence</li><li>(3) Cites the actual outcome (inflation fell, unemployment did not spike) as model-confirming</li><li>(4) Articulates opposite-shock framing: 2008-09 negative AD shock; 2021-23 positive AD shock into constrained SRAS</li><li>(4) Notes that the same toolkit produces opposite optimal moves under opposite shocks</li></ul><p class="solution-label">Grading notes:</p><p>Most-missed point in part 1: students often pick one side ('it was supply, period' or 'it was fiscal stimulus, period') instead of articulating the joint story. Full credit requires explicit recognition that both contributed. Most-missed in part 3: students may simply restate the critique without evaluating it against the observed outcome — full credit requires using the inflation-fell-without-unemployment-spike fact to test the critique. Part 4 is the synthesis: a student who answers correctly should be able to articulate the AS/AD framework as a <em>diagnostic</em> tool, not as a recipe.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U13 — Cumulative Review</strong></span>
+  </footer>
+</article>
+
+<article class="item" id="item-23" data-item-num="23" data-tier="LA" data-points="15" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 23</span><span class="pt-tag">15 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-9</span>
+      <span class="tag unit">U2</span>
+    </div>
+  </header>
+  <div class="item-stem">Many cities have at various points debated banning rideshare surge pricing, especially during emergencies (severe weather, transit shutdowns, large events). Critics argue surge pricing exploits buyers; defenders argue it makes more rides available when they are needed most. Write a response of roughly 200 to 400 words that does all of the following:<br><br>1. Apply the four-step move (what changed, who is affected, in which direction, what happens to the equilibrium) to a rideshare market during an emergency that suddenly raises the number of riders wanting a ride.<br><br>2. Using Hayek's argument that prices act as signals, explain what the surge price tells riders and drivers, respectively.<br><br>3. State and defend a position on what would likely happen, in the short run, to (a) the number of rides actually provided and (b) how those rides get distributed across riders if a city banned surge pricing during emergencies.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-23-text" class="write-label">Your response</label><textarea id="item-23-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>Four-step move: in an emergency such as a major transit shutdown, what changed is rider circumstances. Buses are not running, so riders who would have taken the bus now want a rideshare ride instead. The price of rideshare itself did not change first; rider circumstances did. Who is affected: buyers. Direction: at every fare, more riders want a ride than before. With supply (drivers logged on) roughly fixed in the very short run, the new equilibrium has a higher price. Surge pricing then signals drivers to log on, and the quantity of rides supplied rises as well.
+
+Prices as signals: the surge price tells riders to economize. A rider who could walk twenty minutes, share a ride with a friend, or wait an hour will think twice when she sees a 3x multiplier. The same surge price tells drivers that a ride right now is unusually valuable, and is worth coming in from across town or interrupting an evening to provide. As Hayek's tin example in the marquee suggests, neither party needs to know the underlying cause of the emergency. The price alone carries the information.
+
+Banning surge pricing during emergencies: holding the fare at its normal level prevents the price from doing this signaling work. The number of rides provided would almost certainly be lower than under surge pricing, because drivers would have less reason to log on during a difficult period. The available rides would be rationed by waiting time and luck rather than by willingness to pay. Some riders who valued the ride very highly (a parent picking up a sick child, a worker who absolutely had to get home) would not get one, while others who happened to open the app at the right moment and were content to wait would. Many riders would be worse off, even though those who got a ride paid less. The visible cost (the surge price) is replaced by an invisible one (long waits, unmet rides, lottery-style distribution).</p><p class="solution-label">Key points an answer must hit:</p><ul><li>Four-step move applied to rideshare emergency (demand-side shift)</li><li>Prices-as-signals: surge tells riders to economize, drivers to log on</li><li>Counterfactual: ban produces fewer rides supplied and rationing-by-waiting</li><li>Recognizes that lower fare for those who get rides comes at the cost of fewer rides overall and worse distribution</li></ul><p class="solution-label">Grading notes:</p><p>Four-step move applied correctly: 4 pts. Prices-as-signals explanation (Hayek): 4 pts. Counterfactual reasoning about the ban (rationing-by-waiting, fewer drivers, worse distribution): 5 pts. Quality of writing and a clear stated position: 2 pts. Total: 15 pts.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U2 — Markets and Coordination</strong> · paired video: <a href="https://www.youtube.com/watch?v=kUPm2tMCbGE" target="_blank" rel="noopener">The Demand Curve (MRU-Micro) (3:31)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-24" data-item-num="24" data-tier="LA" data-points="15" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 24</span><span class="pt-tag">15 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-37</span>
+      <span class="tag unit">U3</span>
+    </div>
+  </header>
+  <div class="item-stem">Two hypothetical countries, Alpha and Beta, started in 1960 with roughly identical PPFs (same population, same resources, same technology). By 2020, Alpha's PPF is roughly four times the size of Beta's: Alpha can produce four times as much of any combination of goods. In 250 to 400 words, do three things: (1) name the three standard categories of cause that can shift a PPF outward over time and give a concrete example of each; (2) explain why a recession in Beta is not a candidate explanation for the long-run gap (be specific about what a recession does to the PPF picture); (3) name one ceteris paribus assumption the PPF model holds constant when used this way, and explain why naming it matters for interpreting the comparison.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-24-text" class="write-label">Your response</label><textarea id="item-24-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>A PPF shows the maximum combinations of two goods an economy can produce given its resources, technology, and institutions. When Alpha's frontier ends up four times the size of Beta's after six decades of identical starting conditions, the explanation has to be something that shifts the frontier outward, not something that moves an economy around inside it.
+
+The three standard categories of cause that shift a PPF outward over time are: more resources, better technology, and better institutions. More resources includes physical capital accumulation (machines, buildings, infrastructure) and human capital (schooling, training, health). Concrete example: Korea's investment rate ran above 30 percent of GDP for decades and its school-enrollment rates approached universal secondary by the 1980s. Better technology means new ways of combining inputs to produce more output (semiconductors, container shipping, mRNA vaccines). Concrete example: the diffusion of computer technology raised manufacturing productivity across the OECD in the 1990s. Better institutions means the rules of the game: property rights, enforceable contracts, rule of law, low corruption, predictable politics. Concrete example: post-1990 Chile preserved private property and judicial independence while neighboring Venezuela did not, and the growth paths diverged accordingly.
+
+A recession is not a candidate explanation because a recession is a temporary movement inside the PPF, not a smaller PPF. When unemployment rises and factories run below capacity, an economy is producing below what its frontier allows; the frontier itself has not moved. Even a deep recession lasts a handful of years, while the Alpha-Beta gap accumulated over sixty. A multi-decade four-fold productive capacity gap requires the frontier itself to have moved, not just the operating point inside it.
+
+One ceteris paribus assumption: the PPF holds population size constant across the comparison. Naming this matters because the meaning of 'four times the size' changes depending on what is fixed. If Alpha's population is four times Beta's, the per-capita gap disappears. If populations are similar, the per-capita gap is real and large. The PPF picture is silent on which case applies, so the reader has to label the assumption to know whether the comparison is about country-level output or living standards.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>three causes named: resources, technology, institutions</li><li>concrete example for each cause</li><li>recession is inside-frontier, not a smaller frontier</li><li>gap is too large/long-run to be a recession</li><li>one ceteris paribus assumption named</li><li>reason naming it matters</li></ul><p class="solution-label">Grading notes:</p><p>4 pts for the three causes (1 pt each for naming, 1 pt for at least two concrete examples); 5 pts for the recession analysis (3 pts for the inside-vs-shift distinction, 2 pts for explaining why recession does not fit a 60-year gap); 4 pts for the ceteris paribus section (2 pts for naming an assumption, 2 pts for explaining why naming it matters); 2 pts for writing quality and staying within word count.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U3 — Thinking Like an Economist + PPF</strong> · paired video: <a href="https://www.youtube.com/watch?v=uorrlWJ23Mg" target="_blank" rel="noopener">Opportunity Cost and Tradeoffs (MRU-Micro) (4:38)</a></span>
+  </footer>
+</article>
+  </div>
+</section>
+</main>
+
+<footer class="colophon">
+  <p>ECONM-I · Practice Final · Companion to the static U7 / U14 "Before Your Exam" pages. Calibrated to look like the real exam: same shape, same difficulty range, different items drawn from the bank.</p>
+</footer>
+
+<script>
+window.__NUM = window.__NUM || {};
+
+const STORE_KEY = "econm1-practice-final-v1";
+const SCORE_TOTALS = { AG: 30, SA: 30, LA: 60 };
+const state = (() => {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch { return {}; }
+})();
+function persist() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+
+function recomputeScore() {
+  const sums = { AG: 0, SA: 0, LA: 0 };
+  document.querySelectorAll(".item").forEach(item => {
+    const tier = item.dataset.tier;
+    const pts = parseInt(item.dataset.points, 10) || 0;
+    const id = item.id;
+    const s = state[id];
+    if (!s) return;
+    if (s.outcome === "correct") sums[tier] += pts;
+    else if (s.outcome === "self-credit") sums[tier] += pts;
+  });
+  document.getElementById("score-ag").textContent = sums.AG;
+  document.getElementById("score-sa").textContent = sums.SA;
+  document.getElementById("score-la").textContent = sums.LA;
+  document.getElementById("score-total").textContent = sums.AG + sums.SA + sums.LA;
+}
+
+// Rebuild item interaction state from persisted state.
+function restoreItem(item) {
+  const id = item.id;
+  const s = state[id];
+  if (!s) return;
+  const tier = item.dataset.tier;
+  const qtype = item.dataset.qtype;
+
+  if (qtype === "multipleChoice" || qtype === "multipleAnswer" || qtype === "trueFalse") {
+    const buttons = item.querySelectorAll(".cq-options button");
+    buttons.forEach(b => {
+      b.disabled = true;
+      if (b.dataset.correct === "true") b.classList.add("reveal-correct");
+    });
+    if (s.choseIdx != null && buttons[s.choseIdx]) {
+      const chose = buttons[s.choseIdx];
+      chose.classList.remove("reveal-correct");
+      chose.classList.add(s.outcome === "correct" ? "chosen-correct" : "chosen-wrong");
+    }
+    const explainTxt = s.explain || "";
+    const reveal = item.querySelector(".item-reveal");
+    if (reveal) {
+      reveal.hidden = false;
+      if (explainTxt) {
+        const explainEl = document.createElement("p");
+        explainEl.className = "wrong-explain";
+        explainEl.style.fontStyle = "italic";
+        explainEl.style.color = "var(--ink-soft)";
+        explainEl.textContent = explainTxt;
+        reveal.insertBefore(explainEl, reveal.firstChild);
+      }
+    }
+  } else if (qtype === "numerical") {
+    const input = item.querySelector(".num-input");
+    if (input && s.value != null) input.value = s.value;
+    const fb = item.querySelector(".num-feedback");
+    if (fb) {
+      fb.textContent = s.feedback || "";
+      fb.classList.add(s.outcome === "correct" ? "right" : "wrong");
+    }
+    const reveal = item.querySelector(".item-reveal");
+    if (reveal) reveal.hidden = false;
+    const btn = item.querySelector(".num-check");
+    if (btn) btn.disabled = true;
+  } else {
+    // writing
+    const ta = item.querySelector("textarea");
+    if (ta && s.draft != null) ta.value = s.draft;
+    if (s.revealed) {
+      const reveal = item.querySelector(".item-reveal");
+      if (reveal) reveal.hidden = false;
+      const tgt = item.querySelector(".reveal-target");
+      if (tgt) tgt.hidden = false;
+      // Show self-score buttons
+      addSelfScore(item);
+    }
+  }
+}
+
+function addSelfScore(item) {
+  if (item.querySelector(".self-score")) return;
+  const row = document.createElement("div");
+  row.className = "self-score";
+  row.style.marginTop = "16px";
+  row.style.paddingTop = "12px";
+  row.style.borderTop = "1px dashed var(--rule-soft)";
+  row.style.display = "flex";
+  row.style.gap = "10px";
+  row.style.flexWrap = "wrap";
+  row.style.alignItems = "center";
+  const id = item.id;
+  const cur = state[id] || {};
+  const pts = parseInt(item.dataset.points, 10) || 0;
+  row.innerHTML = '<span style="font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-faint);">Self-score:</span>'
+    + '<button type="button" class="btn ss-full" data-credit="full">Hit the key points (' + pts + '/' + pts + ')</button>'
+    + '<button type="button" class="btn ss-partial" data-credit="partial">Partial (' + Math.floor(pts/2) + '/' + pts + ')</button>'
+    + '<button type="button" class="btn ss-none" data-credit="none">Missed it (0/' + pts + ')</button>';
+  const reveal = item.querySelector(".item-reveal");
+  if (reveal) reveal.appendChild(row);
+  else item.appendChild(row);
+  // Highlight current selection
+  if (cur.selfCredit) {
+    const sel = row.querySelector(".ss-" + cur.selfCredit);
+    if (sel) { sel.classList.add("primary"); }
+  }
+  row.querySelectorAll("button").forEach(b => {
+    b.addEventListener("click", () => {
+      const credit = b.dataset.credit;
+      const map = { full: pts, partial: Math.floor(pts/2), none: 0 };
+      const earned = map[credit];
+      state[id] = {
+        ...(state[id] || {}),
+        revealed: true,
+        selfCredit: credit,
+        outcome: earned === pts ? "self-credit" : (earned > 0 ? "self-credit" : "self-zero"),
+      };
+      // Override outcome to be a partial-credit equivalent by scaling later — for the score readout
+      // we treat any nonzero credit as adding `earned` pts. To keep recomputeScore simple, we set
+      // a `partialPts` field and use that.
+      state[id].partialPts = earned;
+      persist();
+      // Visual mark
+      row.querySelectorAll("button").forEach(x => x.classList.remove("primary"));
+      b.classList.add("primary");
+      recomputeScorePartial();
+    });
+  });
+}
+
+// Override score recompute to honor partialPts on revealed writing items.
+function recomputeScorePartial() {
+  const sums = { AG: 0, SA: 0, LA: 0 };
+  document.querySelectorAll(".item").forEach(item => {
+    const tier = item.dataset.tier;
+    const pts = parseInt(item.dataset.points, 10) || 0;
+    const id = item.id;
+    const s = state[id];
+    if (!s) return;
+    if (s.outcome === "correct") sums[tier] += pts;
+    else if (s.partialPts != null) sums[tier] += s.partialPts;
+  });
+  document.getElementById("score-ag").textContent = sums.AG;
+  document.getElementById("score-sa").textContent = sums.SA;
+  document.getElementById("score-la").textContent = sums.LA;
+  document.getElementById("score-total").textContent = sums.AG + sums.SA + sums.LA;
+}
+
+// Bind MCQ / TF buttons
+document.querySelectorAll(".cq-options").forEach(opts => {
+  const buttons = opts.querySelectorAll("button");
+  buttons.forEach((b, idx) => {
+    b.addEventListener("click", () => {
+      if (b.disabled) return;
+      const correct = b.dataset.correct === "true";
+      buttons.forEach((o, oi) => {
+        o.disabled = true;
+        if (o.dataset.correct === "true") {
+          o.classList.add(o === b ? "chosen-correct" : "reveal-correct");
+        } else if (o === b) {
+          o.classList.add("chosen-wrong");
+        }
+      });
+      const item = b.closest(".item");
+      const reveal = item.querySelector(".item-reveal");
+      if (reveal) reveal.hidden = false;
+      // Add wrong-answer explanation at the top of the reveal if available.
+      const explain = b.dataset.explain || "";
+      if (explain && !correct) {
+        const explainEl = document.createElement("p");
+        explainEl.className = "wrong-explain";
+        explainEl.style.fontStyle = "italic";
+        explainEl.style.color = "var(--ink-soft)";
+        explainEl.textContent = explain;
+        reveal.insertBefore(explainEl, reveal.firstChild);
+      }
+      state[item.id] = {
+        choseIdx: idx,
+        outcome: correct ? "correct" : "wrong",
+        explain,
+      };
+      persist();
+      recomputeScorePartial();
+    });
+  });
+});
+
+// Bind numerical Check
+document.querySelectorAll(".num-check").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const item = btn.closest(".item");
+    const input = item.querySelector(".num-input");
+    const val = parseFloat((input.value || "").replace(/[$,\s]/g, ""));
+    const expected = window.__NUM[item.id];
+    const fb = item.querySelector(".num-feedback");
+    if (expected == null) {
+      fb.textContent = "Sample answer revealed below.";
+      fb.classList.add("right");
+    } else if (isNaN(val)) {
+      fb.textContent = "Enter a number.";
+      fb.classList.add("wrong");
+      return;
+    } else {
+      const margin = Math.max(Math.abs(expected) * 0.05, 0.01);
+      const within = Math.abs(val - expected) <= margin;
+      if (within) {
+        fb.textContent = "Right. Expected " + expected + ".";
+        fb.classList.add("right");
+        state[item.id] = { value: val, outcome: "correct", feedback: fb.textContent };
+      } else {
+        fb.textContent = "Not quite. Expected " + expected + ". Your work goes below; check it against the solution.";
+        fb.classList.add("wrong");
+        state[item.id] = { value: val, outcome: "wrong", feedback: fb.textContent };
+      }
+    }
+    btn.disabled = true;
+    const reveal = item.querySelector(".item-reveal");
+    if (reveal) reveal.hidden = false;
+    persist();
+    recomputeScorePartial();
+  });
+});
+
+// Bind writing reveal
+document.querySelectorAll(".reveal-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const item = btn.closest(".item");
+    const reveal = item.querySelector(".item-reveal");
+    if (reveal) reveal.hidden = false;
+    btn.disabled = true;
+    state[item.id] = {
+      ...(state[item.id] || {}),
+      draft: (item.querySelector("textarea") || {}).value || "",
+      revealed: true,
+    };
+    addSelfScore(item);
+    persist();
+  });
+});
+
+// Save drafts as the student types
+document.querySelectorAll(".item textarea").forEach(ta => {
+  ta.addEventListener("input", () => {
+    const item = ta.closest(".item");
+    state[item.id] = { ...(state[item.id] || {}), draft: ta.value };
+    persist();
+  });
+});
+
+// Reset
+document.getElementById("reset-btn").addEventListener("click", () => {
+  if (!confirm("Reset all progress on this practice exam?")) return;
+  localStorage.removeItem(STORE_KEY);
+  location.reload();
+});
+
+// Restore on load
+document.querySelectorAll(".item").forEach(restoreItem);
+recomputeScorePartial();
+</script>
+</body>
+</html>

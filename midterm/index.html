@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practice Midterm — ECONM-I</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#f4ead2; --paper-light:#fbf5e3; --paper-deep:#ead9af;
+  --ink:#1a120a; --ink-soft:#463a26; --ink-faint:#8a7654;
+  --rule:#c4a373; --rule-soft:#ddc99c;
+  --demand:#a83232; --supply:#3d5d2e; --gold:#c89933;
+  --display:"Fraunces","Iowan Old Style",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --gutter:28px; --radius:3px;
+  --motion-fast:180ms; --motion:320ms;
+  --ease:cubic-bezier(0.22,0.61,0.36,1);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--display);font-variation-settings:"opsz" 14,"SOFT" 30;
+  font-size:18px;line-height:1.6;
+  background-image:radial-gradient(circle at 30% 20%,rgba(196,163,115,0.10),transparent 55%),radial-gradient(circle at 75% 80%,rgba(168,50,50,0.06),transparent 60%);
+}
+
+/* HERO */
+header.hero{padding:60px var(--gutter) 30px;border-bottom:1px solid var(--rule);}
+.hero-inner{max-width:1000px;margin:0 auto;}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 14px;display:flex;align-items:center;gap:14px;}
+.eyebrow::before,.eyebrow::after{content:"";flex:0 0 32px;height:1px;background:var(--rule);}
+.eyebrow::after{flex:1;}
+h1{font-family:var(--display);font-variation-settings:"opsz" 144,"SOFT" 0;font-weight:800;font-size:clamp(40px,7vw,76px);line-height:0.98;letter-spacing:-0.025em;margin:0 0 12px;}
+h1 em{font-style:italic;font-variation-settings:"opsz" 144,"SOFT" 100;color:var(--demand);}
+.deck{font-style:italic;font-size:20px;color:var(--ink-soft);max-width:48ch;margin:8px 0 18px;}
+.meta{display:flex;flex-wrap:wrap;gap:18px;font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--ink-faint);margin-top:12px;}
+.meta span strong{color:var(--ink);font-weight:600;}
+
+/* SCORE BAR */
+.score-bar{position:sticky;top:0;z-index:10;background:var(--paper-deep);border-bottom:1px solid var(--rule);padding:10px var(--gutter);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;color:var(--ink);}
+.score-inner{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:18px;align-items:center;}
+.score-inner .score-cell strong{color:var(--demand);font-weight:600;}
+.score-inner .reset-btn{margin-left:auto;font-family:var(--mono);font-size:11px;background:var(--paper);border:1px solid var(--rule);border-radius:var(--radius);padding:5px 10px;cursor:pointer;color:var(--ink);}
+.score-inner .reset-btn:hover{border-color:var(--gold);}
+
+/* SECTIONS + ITEMS */
+main{max-width:1000px;margin:0 auto;padding:30px var(--gutter) 80px;}
+.section{margin-bottom:48px;}
+.section-head{margin-bottom:20px;}
+.section-head h2{font-family:var(--display);font-variation-settings:"opsz" 96,"SOFT" 0;font-weight:700;font-size:clamp(26px,3vw,34px);margin:0 0 6px;letter-spacing:-0.01em;}
+.section-lede{font-size:16px;color:var(--ink-soft);margin:0;font-style:italic;max-width:60ch;}
+
+.item{background:var(--paper-light);border:1px solid var(--rule-soft);border-left:3px solid var(--demand);border-radius:var(--radius);padding:24px;margin-bottom:20px;}
+.item-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap;}
+.item-num{display:flex;gap:10px;align-items:baseline;}
+.item-num .num-label{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--demand);}
+.item-num .pt-tag{font-family:var(--mono);font-size:11px;color:var(--ink-faint);}
+.item-tags{display:flex;gap:6px;}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:0.10em;text-transform:uppercase;background:var(--paper);border:1px solid var(--rule-soft);border-radius:100px;padding:3px 10px;color:var(--ink-soft);}
+.tag.klo{color:var(--demand);}
+.item-stem{font-family:var(--display);font-size:17px;line-height:1.55;margin:0 0 18px;color:var(--ink);}
+
+.item-interaction{margin-top:14px;}
+
+/* MCQ / TF options */
+.opts-cue{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--ink-faint);margin:0 0 8px;text-transform:uppercase;}
+.cq-options{list-style:none;padding:0;margin:0;display:grid;gap:8px;}
+.cq-options li button{width:100%;text-align:left;font-family:var(--display);font-size:16px;color:var(--ink);background:var(--paper);border:1px solid var(--rule-soft);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:border-color var(--motion-fast) var(--ease),background var(--motion-fast) var(--ease);}
+.cq-options li button:hover{border-color:var(--gold);}
+.cq-options li button.chosen-correct{background:#e6efd9;border-color:var(--supply);color:var(--supply);font-weight:600;}
+.cq-options li button.chosen-wrong{background:#f3dada;border-color:var(--demand);color:var(--demand);}
+.cq-options li button.reveal-correct{border-color:var(--supply);background:var(--paper-light);font-weight:600;}
+.cq-options li button[disabled]{cursor:default;opacity:0.92;}
+
+/* Numerical */
+.num-block{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.num-input{flex:1;min-width:200px;font-family:var(--mono);font-size:16px;padding:10px 12px;border:1px solid var(--rule-soft);border-radius:var(--radius);background:var(--paper);}
+.num-feedback{flex-basis:100%;font-style:italic;color:var(--ink-soft);font-size:15px;margin:6px 0 0;}
+.num-feedback.right{color:var(--supply);}
+.num-feedback.wrong{color:var(--demand);}
+
+/* Writing block */
+.write-block{display:flex;flex-direction:column;gap:10px;}
+.write-label{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--ink-faint);text-transform:uppercase;}
+.write-block textarea{font-family:var(--display);font-size:16px;line-height:1.5;padding:12px 14px;border:1px solid var(--rule-soft);border-radius:var(--radius);background:var(--paper);resize:vertical;min-height:140px;color:var(--ink);}
+.write-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.write-help{font-size:14px;color:var(--ink-soft);font-style:italic;}
+
+/* Buttons */
+.btn{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:var(--radius);padding:9px 14px;cursor:pointer;transition:background var(--motion-fast) var(--ease),border-color var(--motion-fast) var(--ease);}
+.btn:hover{background:#f0deb1;border-color:var(--gold);}
+.btn.primary{background:var(--demand);color:var(--paper);border-color:var(--demand);}
+.btn.primary:hover{background:#8a2828;border-color:#8a2828;}
+
+/* Reveal panels */
+.item-reveal{margin-top:14px;padding-top:14px;border-top:1px dashed var(--rule-soft);font-size:15.5px;color:var(--ink-soft);line-height:1.55;}
+.item-reveal .solution-label{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--demand);margin:14px 0 4px;}
+.item-reveal p:first-child .solution-label{margin-top:0;}
+.item-reveal ul{margin:6px 0 12px 18px;padding:0;}
+.item-reveal li{margin-bottom:4px;}
+.reveal-footer{font-style:italic;color:var(--ink-faint);margin-top:14px;}
+
+/* Item footer (resource callout) */
+.item-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--rule-soft);font-family:var(--mono);font-size:11px;letter-spacing:0.04em;color:var(--ink-faint);display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;}
+.review-eyebrow{text-transform:uppercase;letter-spacing:0.14em;color:var(--demand);}
+.review-body{font-family:var(--display);font-size:14px;font-style:italic;color:var(--ink-soft);letter-spacing:0;text-transform:none;}
+.review-body a{color:var(--demand);text-decoration:none;border-bottom:1px solid var(--rule-soft);}
+
+/* Footer colophon */
+footer.colophon{padding:40px var(--gutter);border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--ink-faint);text-align:center;background:var(--paper);}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+@media print{.score-bar{position:static;} .item-reveal{display:block!important;} .item-reveal[hidden]{display:block!important;}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">ECONM-I · Practice Midterm</p>
+    <h1>Practice <em>Midterm</em></h1>
+    <p class="deck">Calibrated to look like the real midterm: same shape, same difficulty range, different items drawn from the bank. Work it under conditions as close to the real thing as you can: one sitting, no notes the first pass, save the reveals for after.</p>
+    <div class="meta">
+      <span><strong>23 items</strong> · 105 raw pts</span>
+      <span><strong>about 90 minutes</strong></span>
+      <span><strong>self-scored</strong> · saved locally, no signup</span>
+    </div>
+  </div>
+</header>
+
+<div class="score-bar" role="status" aria-live="polite">
+  <div class="score-inner">
+    <span class="score-cell">AG: <strong id="score-ag">0</strong> / 30</span>
+    <span class="score-cell">SA: <strong id="score-sa">0</strong> / 30</span>
+    <span class="score-cell">LA: <strong id="score-la">0</strong> / 45</span>
+    <span class="score-cell">Total: <strong id="score-total">0</strong> / 105</span>
+    <button type="button" class="reset-btn" id="reset-btn">Reset progress</button>
+  </div>
+</div>
+
+<main>
+
+<section class="section" data-tier="AG">
+  <header class="section-head">
+    <h2>Auto-Graded (2 pts each)</h2>
+    <p class="section-lede">Multiple choice, true/false, and numerical. These reward fast, clean reasoning about a single concept.</p>
+  </header>
+  <div class="section-items">
+    
+<article class="item" id="item-1" data-item-num="1" data-tier="AG" data-points="2" data-qtype="numerical">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 1</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-30</span>
+      <span class="tag unit">U1</span>
+    </div>
+  </header>
+  <div class="item-stem">An economy's real GDP per capita grows at a steady 3.5 percent per year. Using the rule of 70, about how many years will it take for real GDP per capita to double? Enter a whole number of years.</div>
+  <div class="item-interaction">
+    <div class="num-block"><input type="text" inputmode="decimal" class="num-input" id="item-1-num" placeholder="Enter your answer"><button type="button" class="num-check btn" data-val="20.0">Check</button><p class="num-feedback" aria-live="polite"></p></div><script>window.__NUM["item-1"] = 20.0;</script>
+  </div>
+  <div class="item-reveal reveal-num" hidden>
+    <p class="solution-label">Why:</p><p>Rule of 70: doubling time (years) is approximately 70 divided by the growth rate in percent per year. 70 / 3.5 = 20 years.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U1 — Onboarding: Growth Is Real</strong> · paired video: <a href="https://www.youtube.com/watch?v=PzAr_mL0Qd8" target="_blank" rel="noopener">Basic Facts of Wealth (4:28)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-2" data-item-num="2" data-tier="AG" data-points="2" data-qtype="numerical">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 2</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-30</span>
+      <span class="tag unit">U1</span>
+    </div>
+  </header>
+  <div class="item-stem">An economy grows real GDP per capita at a steady 5 percent per year. Using the rule of 70, about how many years will it take for real GDP per capita to double? Enter a whole number of years.</div>
+  <div class="item-interaction">
+    <div class="num-block"><input type="text" inputmode="decimal" class="num-input" id="item-2-num" placeholder="Enter your answer"><button type="button" class="num-check btn" data-val="14.0">Check</button><p class="num-feedback" aria-live="polite"></p></div><script>window.__NUM["item-2"] = 14.0;</script>
+  </div>
+  <div class="item-reveal reveal-num" hidden>
+    <p class="solution-label">Why:</p><p>Rule of 70: doubling time (years) is approximately 70 divided by the growth rate in percent per year. 70 / 5 = 14 years.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U1 — Onboarding: Growth Is Real</strong> · paired video: <a href="https://www.youtube.com/watch?v=PzAr_mL0Qd8" target="_blank" rel="noopener">Basic Facts of Wealth (4:28)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-3" data-item-num="3" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 3</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-9</span>
+      <span class="tag unit">U2</span>
+    </div>
+  </header>
+  <div class="item-stem">When a surplus exists in a market, in which direction does the price tend to move, and why?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="Sellers can want higher revenue, but in a surplus they have unsold goods and downward pressure on price. Wishing for more revenue does not raise the price.">Up, because sellers in the market want to earn more revenue per unit sold.</button></li><li><button type="button" data-correct="false" data-explain="Buyer competition raises prices when there is a shortage, not a surplus. In a surplus, sellers are competing for buyers, not the other way around.">Up, because buyers begin competing for the limited stock of available goods.</button></li><li><button type="button" data-correct="true" data-explain="Correct. A surplus is unsold inventory. Sellers respond by lowering prices to clear inventory, which moves the market back toward equilibrium.">Down, because sellers face unsold inventory and cut prices to attract more buyers.</button></li><li><button type="button" data-correct="false" data-explain="Surpluses tend to be self-correcting through price cuts. Markets do not stay in surplus indefinitely unless something (like a price floor) prevents the price from falling.">The price does not move; the market sits in surplus indefinitely without correcting.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>A surplus pushes the price down: sellers have unsold goods and respond by cutting prices to move inventory. This continues until quantity demanded rises and quantity supplied falls enough to clear the market.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U2 — Markets and Coordination</strong> · paired video: <a href="https://www.youtube.com/watch?v=kUPm2tMCbGE" target="_blank" rel="noopener">The Demand Curve (MRU-Micro) (3:31)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-4" data-item-num="4" data-tier="AG" data-points="2" data-qtype="numerical">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 4</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-2</span>
+      <span class="tag unit">U2</span>
+    </div>
+  </header>
+  <div class="item-stem">Priya is choosing how to spend her summer. Her options are: take a paid research internship that pays $5,000 for the summer, take an unpaid internship at a nonprofit she values at $3,500 of personal enjoyment and resume value, or work as a swim coach for $4,200. She chooses the paid research internship. In dollars, what is the opportunity cost of her choice?</div>
+  <div class="item-interaction">
+    <div class="num-block"><input type="text" inputmode="decimal" class="num-input" id="item-4-num" placeholder="Enter your answer"><button type="button" class="num-check btn" data-val="4200.0">Check</button><p class="num-feedback" aria-live="polite"></p></div><script>window.__NUM["item-4"] = 4200.0;</script>
+  </div>
+  <div class="item-reveal reveal-num" hidden>
+    <p class="solution-label">Why:</p><p>Opportunity cost is the value of the next-best alternative she did not take, not the sum of all alternatives. Ranked by value, her two alternatives are the swim-coach job ($4,200) and the nonprofit internship ($3,500). The next-best alternative she gave up is the swim-coach job. Opportunity cost = $4,200.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U2 — Markets and Coordination</strong> · paired video: <a href="https://www.youtube.com/watch?v=kUPm2tMCbGE" target="_blank" rel="noopener">The Demand Curve (MRU-Micro) (3:31)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-5" data-item-num="5" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 5</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-1</span>
+      <span class="tag unit">U2</span>
+    </div>
+  </header>
+  <div class="item-stem">Four people each make the following observation about their own life. Which observation is the clearest illustration of <em>economic scarcity</em> in the sense the term is used in this course?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="true" data-explain="Correct. Scarcity in the economic sense is that resources (here: time) are limited while wants (work and study, both desired) are not. The student must choose, and choosing one option forecloses another — the canonical opportunity-cost framing. Scarcity exists even when no one is poor and nothing is unusual.">A college student says: 'I have only 24 hours in a day, so taking the early-morning shift at work means I cannot study for my chemistry exam.'</button></li><li><button type="button" data-correct="false" data-explain="This describes affordability and a price shock, not scarcity in the economic sense. Even at low prices, gasoline is scarce because the resources used to refine and deliver it have alternative uses. Affordability is a related but distinct concept.">A commuter says: 'The price of gas jumped 40 cents last week and now I can barely afford to fill up my tank twice a month.'</button></li><li><button type="button" data-correct="false" data-explain="This describes the <em>absence</em> of a recent shortage, which is the opposite of scarcity in the everyday sense. But economically, water in Phoenix is scarce: the desert climate forces tradeoffs about how much to use for gardens vs. drinking vs. industry. The retiree is confusing 'no recent shortage' with 'not scarce.'">A retiree in Phoenix says: 'There has not been a serious water shortage in this city for years, so I do not worry about water at all when I plan my garden.'</button></li><li><button type="button" data-correct="false" data-explain="This is a temporary shortage caused by a supply-chain disruption, not scarcity. Scarcity is a permanent condition about resources and wants; a stock-out that resolves next week is a short-run inventory problem.">A grocery shopper says: 'My favorite cereal was sold out at the store on Saturday because of a supply-chain delay, but it will be back in stock next week.'</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U2 — Markets and Coordination</strong> · paired video: <a href="https://www.youtube.com/watch?v=kUPm2tMCbGE" target="_blank" rel="noopener">The Demand Curve (MRU-Micro) (3:31)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-6" data-item-num="6" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 6</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-9</span>
+      <span class="tag unit">U2</span>
+    </div>
+  </header>
+  <div class="item-stem">The price of coffee beans on the global market rises sharply over the course of a year because of a poor Brazilian harvest. At a typical American coffee shop, the menu price of a latte goes from $5.00 to $6.00, and the shop sells fewer lattes per day at the new price. Which of the following best describes what happened in the market for lattes at that shop?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="This confuses <em>quantity demanded</em> with <em>demand</em>. A change in the price of the good itself produces a movement along the demand curve, not a shift of the demand curve. The demand curve shifts only when a <em>non-price</em> shifter (income, tastes, prices of related goods, expectations, number of buyers) changes.">The demand curve for lattes shifted left because lattes became more expensive, and consumers respond to higher prices by demanding less of a good.</button></li><li><button type="button" data-correct="true" data-explain="Correct. A change in the price of lattes produces a movement <em>along</em> the demand curve. The demand curve itself shifted on the <em>supply</em> side (rising input cost from coffee beans), but on the demand side, the curve is unchanged — only the quantity demanded along the existing curve moves.">A movement <em>along</em> the demand curve for lattes occurred: the price rose, quantity demanded fell, but the demand curve itself did not shift.</button></li><li><button type="button" data-correct="false" data-explain="Higher prices do not 'shift both curves together.' A price change is a movement along each curve, not a shift of either. The Brazilian harvest shifted only the <em>supply</em> curve (input cost); the demand curve did not move.">Both the demand curve and the supply curve for lattes shifted left, because higher prices always shift both curves together.</button></li><li><button type="button" data-correct="false" data-explain="The supply curve shifted <em>left</em>, not right: higher input costs reduce the quantity suppliers are willing to provide at each menu price. A rightward supply shift would lower the menu price, not raise it.">The supply curve for lattes shifted right, which is why the shop raised the price to balance the change in supply with unchanged consumer demand.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U2 — Markets and Coordination</strong> · paired video: <a href="https://www.youtube.com/watch?v=kUPm2tMCbGE" target="_blank" rel="noopener">The Demand Curve (MRU-Micro) (3:31)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-7" data-item-num="7" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 7</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-36</span>
+      <span class="tag unit">U3</span>
+    </div>
+  </header>
+  <div class="item-stem">The slope of an economy's PPF at any point represents:</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="Total resources determine where the frontier sits, not its slope at any one point.">The total quantity of productive resources the economy has available to use.</button></li><li><button type="button" data-correct="false" data-explain="Prices do not appear on the PPF. The PPF is a production diagram, not a market diagram.">The ratio of one good's market price to the other good's market price in equilibrium.</button></li><li><button type="button" data-correct="true" data-explain="Correct. The slope of the PPF at a point measures how much of one good must be given up to get one more unit of the other: opportunity cost.">The opportunity cost of one good measured in units of the other good given up.</button></li><li><button type="button" data-correct="false" data-explain="Recession vs potential is read from where the economy sits relative to the PPF, not from its slope.">Whether the economy is currently in a recession or operating at potential output.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>The PPF's slope is the opportunity cost of one good in terms of the other. A bowed-outward PPF has a steepening slope as more of the good on the horizontal axis is produced, which means the opportunity cost of that good rises as more of it is made.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U3 — Thinking Like an Economist + PPF</strong> · paired video: <a href="https://www.youtube.com/watch?v=uorrlWJ23Mg" target="_blank" rel="noopener">Opportunity Cost and Tradeoffs (MRU-Micro) (4:38)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-8" data-item-num="8" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 8</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-3</span>
+      <span class="tag unit">U3</span>
+    </div>
+  </header>
+  <div class="item-stem">When an economist applies the ceteris paribus assumption, the main purpose is to:</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="No model with a ceteris paribus clause can predict exact real-world behavior, because in reality many things change at once. The clause is a modeling move, not a prediction tool.">Predict exactly how the real economy will behave in the coming year under current policy.</button></li><li><button type="button" data-correct="false" data-explain="The economist is not claiming the rest of the world is frozen. She is holding it constant in the model so one relationship can be examined.">Claim that nothing else in the broader economy is actually changing at the same time.</button></li><li><button type="button" data-correct="true" data-explain="Correct. Holding other variables fixed in the model isolates the effect of the variable under study. The model statement is then a clean statement about one relationship.">Isolate the effect of one variable in a model so the relationship can be examined cleanly.</button></li><li><button type="button" data-correct="false" data-explain="Ceteris paribus does not change a statement's positive-normative status. Both kinds of claims can include the assumption.">Convert a normative claim about what should happen into a positive claim about what does happen.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>Ceteris paribus is a modeling device: holding other variables constant so the effect of one variable can be examined in isolation. It does not claim the real world is frozen; it is a tool for cleanly stating one relationship at a time.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U3 — Thinking Like an Economist + PPF</strong> · paired video: <a href="https://www.youtube.com/watch?v=uorrlWJ23Mg" target="_blank" rel="noopener">Opportunity Cost and Tradeoffs (MRU-Micro) (4:38)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-9" data-item-num="9" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 9</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-3</span>
+      <span class="tag unit">U3</span>
+    </div>
+  </header>
+  <div class="item-stem">A retail store manager is deciding whether to stay open for one more hour tonight. The most relevant comparison for this decision is:</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="Averages over the past month do not tell the manager what one more hour adds tonight. The decision is at the margin.">The store's average revenue per hour against its average cost per hour over the past month.</button></li><li><button type="button" data-correct="false" data-explain="Total revenue and cost for the year include hours already worked, which are sunk. The next hour is the decision.">The total revenue the store earns this year against the total cost it pays this year.</button></li><li><button type="button" data-correct="true" data-explain="Correct. The marginal decision rule compares the extra benefit of one more action against the extra cost of that action.">The extra revenue from one more hour against the extra cost of staying open that hour.</button></li><li><button type="button" data-correct="false" data-explain="Past net profit by quarter does not bear on tonight's one-hour choice.">The store's net profit last quarter against the store's net profit this quarter so far.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>The marginal decision rule: compare the marginal benefit (extra revenue from one more hour) against the marginal cost (extra cost of that hour: wages, lights, etc.). Averages and totals can be misleading because they bundle past or unrelated effects in with the next decision.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U3 — Thinking Like an Economist + PPF</strong> · paired video: <a href="https://www.youtube.com/watch?v=uorrlWJ23Mg" target="_blank" rel="noopener">Opportunity Cost and Tradeoffs (MRU-Micro) (4:38)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-10" data-item-num="10" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 10</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-11</span>
+      <span class="tag unit">U4</span>
+    </div>
+  </header>
+  <div class="item-stem">Which of the following best describes consumer surplus?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="true" data-explain="Correct. Consumer surplus is the buyer's gain from a trade.">The difference between the maximum a buyer is willing to pay and the price the buyer actually pays</button></li><li><button type="button" data-correct="false" data-explain="This describes producer surplus, not consumer surplus.">The difference between the price a seller receives and the seller's minimum acceptable price</button></li><li><button type="button" data-correct="false" data-explain="Total revenue is not consumer surplus; it does not net against willingness to pay.">The total revenue a seller collects on a unit sold at the prevailing market price</button></li><li><button type="button" data-correct="false" data-explain="Tax incidence is a different concept; consumer surplus is about the gain from voluntary trade, not the burden of a tax.">The portion of a per-unit excise tax that falls on the buyer rather than the seller</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>Consumer surplus is the buyer's gain from exchange: willingness to pay minus price paid.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U4 — Welfare and Government Policy</strong> · paired video: <a href="https://www.youtube.com/watch?v=oL20S7c0ZJE" target="_blank" rel="noopener">Consumer Surplus (MRU-Micro) (2:56)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-11" data-item-num="11" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 11</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-12</span>
+      <span class="tag unit">U4</span>
+    </div>
+  </header>
+  <div class="item-stem">A binding price floor (a legal price minimum set above the equilibrium price) generally produces which of the following effects?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="true" data-explain="Correct. A binding price floor causes quantity supplied to exceed quantity demanded (a surplus) and destroys gains from trade.">A surplus of the good (quantity supplied exceeds quantity demanded) and a reduction in total surplus</button></li><li><button type="button" data-correct="false" data-explain="A shortage arises from a binding price ceiling; total surplus shrinks under a binding floor.">A shortage of the good and an overall increase in total surplus from the price intervention</button></li><li><button type="button" data-correct="false" data-explain="A binding price floor reduces quantity demanded; quantity traded falls.">No effect on quantity traded as long as the floor is legally enforced in the market</button></li><li><button type="button" data-correct="false" data-explain="A price floor is not a tax; no revenue is collected.">A direct transfer of consumer surplus to the government collected as excise tax revenue</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>A binding price floor causes quantity supplied to exceed quantity demanded (a surplus, often unemployment in a labor market context) and destroys gains from trade.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U4 — Welfare and Government Policy</strong> · paired video: <a href="https://www.youtube.com/watch?v=oL20S7c0ZJE" target="_blank" rel="noopener">Consumer Surplus (MRU-Micro) (2:56)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-12" data-item-num="12" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 12</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-35</span>
+      <span class="tag unit">U5</span>
+    </div>
+  </header>
+  <div class="item-stem">Which of the following correctly distinguishes the infant industry argument for protectionism from the national security argument?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="Neither argument is principally about foreign labor practices. (That is a separate &quot;unfair labor&quot; argument.)">Both arguments claim domestic industries need protection because foreign producers use unfair labor practices.</button></li><li><button type="button" data-correct="true" data-explain="Correct. Each argument has a distinct logic and a distinct target.">Infant industry protects a new domestic industry to develop scale; national security avoids dependence on critical imports.</button></li><li><button type="button" data-correct="false" data-explain="This reverses the two arguments.">The national security argument is about young industries; the infant industry argument is about strategically critical goods.</button></li><li><button type="button" data-correct="false" data-explain="Neither argument calls for permanent protection of all goods.">Both arguments claim that all imports should be permanently restricted to protect domestic jobs.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>Infant industry: a young domestic industry needs temporary import protection so it can develop the skills and scale to compete with established foreign producers (OpenStax 21.3, Brazil computer industry example). National security: a country should not depend on imports for goods critical to its defense or basic functioning (steel, oil, microchips). Distinct arguments, distinct targets.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U5 — Gains from Trade</strong> · paired video: <a href="https://www.youtube.com/watch?v=8GsAwczbJp4" target="_blank" rel="noopener">Trade: Engine of Specialization (MRU-Micro) (6:30)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-13" data-item-num="13" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 13</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-11</span>
+      <span class="tag unit">U6</span>
+    </div>
+  </header>
+  <div class="item-stem">A binding price floor in a competitive market is most likely to cause which of the following?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="A shortage is the consequence of a binding price ceiling (price held below equilibrium).">A shortage of the good as quantity demanded exceeds quantity supplied</button></li><li><button type="button" data-correct="true" data-explain="Correct. A binding price floor sits above the equilibrium price, so Qs exceeds Qd. The gap is a surplus.">A surplus of the good as quantity supplied exceeds quantity demanded</button></li><li><button type="button" data-correct="false" data-explain="A binding price floor reduces the quantity transacted (the short side rules), not increases it.">An increase in the equilibrium quantity transacted</button></li><li><button type="button" data-correct="false" data-explain="A binding price control by definition changes the quantities on at least one side.">No change in either quantity demanded or quantity supplied</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>A binding price floor sits above the equilibrium price. At that higher price the quantity supplied rises and the quantity demanded falls. The gap (Qs minus Qd) is a surplus of the good.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U6 — Skill Benchmark: Market Analysis</strong></span>
+  </footer>
+</article>
+
+<article class="item" id="item-14" data-item-num="14" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 14</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-12</span>
+      <span class="tag unit">U6</span>
+    </div>
+  </header>
+  <div class="item-stem">A government imposes a per-unit tax on a good. Both buyers and sellers in this market have many close substitutes available. Based on the tax-incidence intuition that the side which cannot walk away bears more of the tax, which statement is most likely true about the tax's incidence?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="Statutory incidence (who hands the money to the government) does not determine economic incidence.">The tax falls entirely on buyers because they pay the listed price.</button></li><li><button type="button" data-correct="false" data-explain="Same point: statutory incidence does not determine who bears the burden.">The tax falls entirely on sellers because they remit the tax to the government.</button></li><li><button type="button" data-correct="true" data-explain="Correct. Tax incidence depends on who can walk away. If both sides can walk away (both have substitutes), neither bears most of the burden; it splits.">The tax burden is shared roughly evenly because both sides can walk away.</button></li><li><button type="button" data-correct="false" data-explain="The tax still reduces the quantity transacted; the side with more substitutes bears less of the burden but the tax still has a real effect.">The tax has no effect because both sides have substitutes.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>The U4 intuition: the side that can walk away (find substitutes, exit the market) bears less of the burden. The side that is stuck bears more. When both sides have many substitutes, the burden splits roughly evenly and the quantity transacted falls substantially.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U6 — Skill Benchmark: Market Analysis</strong></span>
+  </footer>
+</article>
+
+<article class="item" id="item-15" data-item-num="15" data-tier="AG" data-points="2" data-qtype="multipleChoice">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 15</span><span class="pt-tag">2 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-33</span>
+      <span class="tag unit">U6</span>
+    </div>
+  </header>
+  <div class="item-stem">Country A can produce either 100 cars or 200 bushels of wheat with its resources. Country B can produce either 60 cars or 60 bushels of wheat with its resources. Which country has the comparative advantage in wheat, and which in cars?</div>
+  <div class="item-interaction">
+    <ul class="cq-options" data-multi="false"><li><button type="button" data-correct="false" data-explain="Comparative advantage depends on opportunity cost ratios, not absolute production levels. &quot;Better at both&quot; is absolute advantage.">A has comparative advantage in both because it can produce more of each.</button></li><li><button type="button" data-correct="false" data-explain="The opportunity cost ratios differ (0.5 vs 1.0), so comparative advantage exists.">Neither country has a comparative advantage because the opportunity costs are equal.</button></li><li><button type="button" data-correct="false" data-explain="The opportunity costs go the other way: A is the wheat specialist.">A has comparative advantage in cars; B has comparative advantage in wheat.</button></li><li><button type="button" data-correct="true" data-explain="Correct. A's opportunity cost of 1 bushel of wheat is 0.5 cars (100/200). B's opportunity cost of 1 bushel of wheat is 1 car (60/60). A gives up less to make wheat. A has CA in wheat; B has CA in cars.">A has comparative advantage in wheat; B has comparative advantage in cars.</button></li></ul>
+  </div>
+  <div class="item-reveal reveal-mc" hidden>
+    <p class="solution-label">Why:</p><p>A's opportunity cost of 1 bushel of wheat is 100/200 = 0.5 cars. B's opportunity cost of 1 bushel of wheat is 60/60 = 1 car. A gives up less to produce wheat, so A has comparative advantage in wheat. By the symmetric logic, B's opportunity cost of 1 car is 1 bushel of wheat, while A's is 2 bushels. B gives up less to produce cars, so B has comparative advantage in cars.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U6 — Skill Benchmark: Market Analysis</strong></span>
+  </footer>
+</article>
+  </div>
+</section>
+<section class="section" data-tier="SA">
+  <header class="section-head">
+    <h2>Short Answer (6 pts each)</h2>
+    <p class="section-lede">Two-to-three-paragraph responses. Each item asks you to identify a framework, apply it, and name a limitation or complication. Show your work on any quantitative item.</p>
+  </header>
+  <div class="section-items">
+    
+<article class="item" id="item-16" data-item-num="16" data-tier="SA" data-points="6" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 16</span><span class="pt-tag">6 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-10</span>
+      <span class="tag unit">U2</span>
+    </div>
+  </header>
+  <div class="item-stem">A sustained rise in the price of gasoline persists for over a year. Gasoline is a complement to large SUVs. Apply the four-step move from the unit page to the market for new large SUVs, and predict what happens to the equilibrium price and quantity of new SUVs sold during the period of high gasoline prices. Four to six sentences.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-16-text" class="write-label">Your response</label><textarea id="item-16-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>What changed: the price of gasoline (a complement to SUVs) rose, making the bundled cost of owning an SUV higher. The price of SUVs themselves did not change first. Who is affected: buyers. Direction: at every SUV price, fewer buyers want an SUV, because the cost of operating one has gone up. Equilibrium: with demand for SUVs lower at every price and supply unchanged, the new equilibrium has a lower price and a lower quantity. Dealers cut SUV prices (or offer larger incentives) and sell fewer units.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>What changed: price of complement rose, not the price of SUVs</li><li>Who is affected: buyers (demand side)</li><li>Direction: fewer wanted at every price</li><li>Equilibrium: lower P, lower Q</li></ul><p class="solution-label">Grading notes:</p><p>1 pt for noting the price of SUVs itself did not change first; 1 pt for identifying the demand side via complement reasoning; 2 pts for the direction (less demanded at every price); 2 pts for the equilibrium prediction (lower P, lower Q).</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U2 — Markets and Coordination</strong> · paired video: <a href="https://www.youtube.com/watch?v=kUPm2tMCbGE" target="_blank" rel="noopener">The Demand Curve (MRU-Micro) (3:31)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-17" data-item-num="17" data-tier="SA" data-points="6" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 17</span><span class="pt-tag">6 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-36</span>
+      <span class="tag unit">U3</span>
+    </div>
+  </header>
+  <div class="item-stem">A hospital surgical unit can produce, in any combination on its PPF: (A) 100 routine tonsillectomies and 0 complex heart surgeries per month, (B) 60 tonsillectomies and 8 heart surgeries, (C) 0 tonsillectomies and 12 heart surgeries. Compute the opportunity cost of one additional heart surgery (in tonsillectomies given up) on each segment. Then explain in 2 to 3 sentences why opportunity cost rises along this PPF (what is happening with the unit's staff and equipment).</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-17-text" class="write-label">Your response</label><textarea id="item-17-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>On the A-to-B segment, the unit gains 8 heart surgeries (from 0 to 8) and gives up 40 tonsillectomies (from 100 to 60), so the opportunity cost per heart surgery is 40 / 8 = 5 tonsillectomies. On the B-to-C segment, the unit gains 4 heart surgeries (from 8 to 12) and gives up 60 tonsillectomies (from 60 to 0), so the opportunity cost is 60 / 4 = 15 tonsillectomies per heart surgery. The opportunity cost of heart surgeries rises because the resources reallocated first are the ones most suited to the new task. Later, to produce yet more heart surgeries, the unit has to reassign general surgeons and operating rooms that were really good at producing tonsillectomies, so the tonsillectomy count falls faster per added heart surgery. That rising opportunity cost is exactly what bows the PPF outward.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>A-to-B OC = 5 tonsillectomies per heart surgery</li><li>B-to-C OC = 15 tonsillectomies per heart surgery</li><li>opportunity cost rises identified</li><li>reason tied to resource reallocation (best-suited resources reassigned first)</li></ul><p class="solution-label">Grading notes:</p><p>1 pt each for the two correct opportunity costs (2 pts); 2 pts for identifying that opportunity cost rises; 2 pts for the resource-reallocation explanation.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U3 — Thinking Like an Economist + PPF</strong> · paired video: <a href="https://www.youtube.com/watch?v=uorrlWJ23Mg" target="_blank" rel="noopener">Opportunity Cost and Tradeoffs (MRU-Micro) (4:38)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-18" data-item-num="18" data-tier="SA" data-points="6" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 18</span><span class="pt-tag">6 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-34</span>
+      <span class="tag unit">U5</span>
+    </div>
+  </header>
+  <div class="item-stem">For decades the United States has imposed strict quotas on imported sugar, keeping U.S. sugar prices roughly double the world price. (a) Predict the effects of this quota on the U.S. domestic price of sugar, the quantity U.S. consumers buy, and the quantity U.S. sugar producers sell. (b) Identify two groups in the U.S. who pay for this policy and one group who benefits. Three to five sentences total.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-18-text" class="write-label">Your response</label><textarea id="item-18-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>(a) Domestic price up; consumer quantity down; producer quantity up. (b) Paid by U.S. sugar consumers and U.S. sugar-using industries (candy, food); benefits U.S. sugar producers.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>price direction correct</li><li>consumer quantity direction correct</li><li>producer quantity direction correct</li><li>identifies at least two losers</li><li>identifies at least one winner</li></ul><p class="solution-label">Grading notes:</p><p>2 pts price/quantity predictions; 2 pts losers identified; 2 pts winners identified.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U5 — Gains from Trade</strong> · paired video: <a href="https://www.youtube.com/watch?v=8GsAwczbJp4" target="_blank" rel="noopener">Trade: Engine of Specialization (MRU-Micro) (6:30)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-19" data-item-num="19" data-tier="SA" data-points="6" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 19</span><span class="pt-tag">6 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-11</span>
+      <span class="tag unit">U6</span>
+    </div>
+  </header>
+  <div class="item-stem">A binding price ceiling on gasoline (cap set below the market-clearing price) is imposed during a crisis. Beyond the obvious shortage, name and briefly explain two &quot;secondary&quot; effects on the market that the simple supply-and-demand picture predicts. (3-5 sentences)</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-19-text" class="write-label">Your response</label><textarea id="item-19-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>Two effects with brief explanation. Acceptable: nonprice rationing (queues), quality degradation, complement-good price gouging, black markets, search-cost reallocation.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>nonprice-rationing</li><li>quality-degradation-or-black-market</li><li>time-cost</li><li>two-effects-explained</li></ul><p class="solution-label">Grading notes:</p><p>2 pts each for naming and briefly explaining a valid secondary effect. Acceptable answers: nonprice rationing / queues, quality degradation, complement-good price gouging, black markets, search costs.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U6 — Skill Benchmark: Market Analysis</strong></span>
+  </footer>
+</article>
+
+<article class="item" id="item-20" data-item-num="20" data-tier="SA" data-points="6" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 20</span><span class="pt-tag">6 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-9</span>
+      <span class="tag unit">U6</span>
+    </div>
+  </header>
+  <div class="item-stem">A city imposes a tax of $0.02 per ounce on sugar-sweetened beverages. Predict what happens to the in-city price and quantity sold of soda using the U2 + U4 toolkit (3 sentences). Then state one positive claim and one normative claim that could be made about this policy (2 sentences). (5-6 sentences total)</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-20-text" class="write-label">Your response</label><textarea id="item-20-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>3 sentences of market prediction (input-cost framing, price up by less than the full tax, quantity down), plus one example positive and one example normative claim.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>tax-raises-cost-to-sellers</li><li>price-rises-quantity-falls</li><li>cross-border-substitution-noted</li><li>positive-claim-example</li><li>normative-claim-example</li></ul><p class="solution-label">Grading notes:</p><p>3 pts: correct U2+U4 prediction (1 each for input-cost framing, price up, quantity down). 1 pt for noting substitution / cross-border shopping. 1 pt: valid positive claim. 1 pt: valid normative claim.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U6 — Skill Benchmark: Market Analysis</strong></span>
+  </footer>
+</article>
+  </div>
+</section>
+<section class="section" data-tier="LA">
+  <header class="section-head">
+    <h2>Long Answer (15 pts each)</h2>
+    <p class="section-lede">Roughly 400-word responses to a multi-part scenario integrating two or three ideas across units.</p>
+  </header>
+  <div class="section-items">
+    
+<article class="item" id="item-21" data-item-num="21" data-tier="LA" data-points="15" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 21</span><span class="pt-tag">15 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-12</span>
+      <span class="tag unit">U4</span>
+    </div>
+  </header>
+  <div class="item-stem">In 300 to 450 words, explain Bastiat's distinction between &quot;what is seen&quot; and &quot;what is not seen&quot; using one concrete policy of your choice (a price control, a tariff, a subsidy, or a tax). Identify (a) the visible beneficiaries and visible costs, (b) the hidden costs Bastiat would have you count, and (c) why the seen tends to dominate public debate over the unseen. Use specific examples where possible.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-21-text" class="write-label">Your response</label><textarea id="item-21-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>Bastiat's central move in the broken-window essay is that policy analysis must count not just what is visible but what is not. A broken window enriches the glazier (seen), but the shopkeeper now cannot buy the shoes he would have bought (unseen). The glazier's gain has a face; the shoemaker's loss does not. Take the 2018 U.S. tariffs on imported washing machines. What is seen: Whirlpool added production at its Clyde, Ohio plant; specific workers were hired; the company could be photographed at a ribbon-cutting. The visible benefit was concentrated and identifiable. What is not seen: U.S. consumers paid well above the wage premium captured by the new domestic workers, an outcome documented by Flaaen, Hortacsu, and Tintelnot's 2019 study of the tariffs. The aggregate consumer cost ran into the billions per year, spread across millions of washing-machine and dryer buyers who did not connect the price increase to the tariff. Dryer prices also rose because they tend to be bought as a pair. Foreign retaliation hit downstream U.S. industries with no connection to washing machines. Why does the seen dominate the debate? Because the seen has a constituency. Whirlpool employees and the Clyde plant management can show up at hearings, write op-eds, and be the subject of news features. The washing-machine buyer who paid $80 more does not organize, does not write op-eds, and may not even know the tariff is the cause. The unseen is statistical: a small loss distributed across many people, often invisible to the people bearing it. This asymmetry is structural, not contingent. It is why bad policies persist even when the unseen costs exceed the seen benefits by a wide margin, and why economists since Bastiat have argued that the discipline's main contribution to policy debate is making the unseen visible.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>Bastiat framework identified (count what is not seen)</li><li>Specific policy named with specific seen beneficiaries</li><li>Specific unseen costs named (diffuse, downstream, statistical)</li><li>Concrete numbers or studies where possible</li><li>Explanation of why the seen dominates (concentration, organization, identifiability)</li><li>Writing quality: organized, no hand-waving</li></ul><p class="solution-label">Grading notes:</p><p>3 pts for Bastiat framework correctly explained; 3 pts for specific policy plus seen beneficiaries; 4 pts for specific unseen costs; 2 pts for concrete supporting evidence; 2 pts for explanation of asymmetry in debate; 1 pt for writing quality.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U4 — Welfare and Government Policy</strong> · paired video: <a href="https://www.youtube.com/watch?v=oL20S7c0ZJE" target="_blank" rel="noopener">Consumer Surplus (MRU-Micro) (2:56)</a></span>
+  </footer>
+</article>
+
+<article class="item" id="item-22" data-item-num="22" data-tier="LA" data-points="15" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 22</span><span class="pt-tag">15 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-35</span>
+      <span class="tag unit">U6</span>
+    </div>
+  </header>
+  <div class="item-stem">A senator proposes a 20 percent tariff on all imported automobiles to &quot;protect American auto jobs.&quot; Write an extended analysis (300-450 words) that does the following: (1) Predict the effects of the tariff on the U.S. auto market (price, quantity sold, who gains, who loses), applying the tariff-effects-on-domestic-price-and-quantity reasoning. (2) Connect the analysis to comparative advantage: explain why some auto production may have moved abroad in the first place and what the tariff does to that pattern. (3) Identify the positive claim (or claims) embedded in the senator's framing and the normative claim (or claims). (4) State whether you would support, modify, or oppose the tariff, with at least two pieces of supporting reasoning grounded in the unit's content on markets, surplus, and trade.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-22-text" class="write-label">Your response</label><textarea id="item-22-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>Tariff prediction. A 20 percent tariff on imported autos raises the price of imported cars in the U.S. by roughly that amount, less whatever foreign producers absorb. Domestic producers face less competition at the new price, so their output and price both rise. Total quantity of cars sold in the U.S. falls, because some buyers are pushed out at the higher price. Winners: U.S. auto producers (higher prices, larger market share) and U.S. workers at U.S.-located plants. Losers: U.S. car buyers (higher prices on imports and on domestic cars that follow imports up), foreign producers and their workers, and downstream U.S. industries that use vehicles as inputs (delivery, rentals, ride-share). If the trading partners retaliate (a near-certain outcome historically), losses spread to U.S. export sectors as well.
+
+Comparative-advantage connection. Auto production migrated partly because other countries developed real cost advantages: Japan's lean-manufacturing methods, Korea's labor and capital structure, Mexico's lower labor costs combined with proximity to U.S. consumers. These are opportunity-cost facts about where each kind of vehicle (entry-level sedan, light truck, premium SUV) is cheapest to build. A tariff does not change the underlying comparative advantage. It changes what U.S. buyers pay relative to what production actually costs. Some marginal production may shift back to the U.S., but the world-price gap that drove the migration in the first place still exists. The tariff is a tax on U.S. buyers funneled to U.S. producers, not a productivity gain.
+
+Positive vs normative. The positive claim in the senator's framing: a tariff will protect American auto jobs. This is empirical (and partly true: some U.S. auto-assembly jobs would be preserved or added, though net of downstream losses the picture is mixed). The normative claim: protecting auto jobs is worth the cost to car buyers and to downstream industries. That depends on values, on whose welfare counts and how much.
+
+Recommendation. I would oppose the tariff. Two reasons. First, the consumer-cost-per-job-preserved math is poor in past episodes of auto and similar tariffs. Headline studies of recent trade actions have found consumer costs per saved job that run into hundreds of thousands of dollars per year, well above the wage premium captured by the new domestic workers. Second, retaliation by trading partners is the rule rather than the exception, and U.S. export industries (agriculture, aerospace, services) bear costs that the auto tariff was not designed to consider. A direct wage subsidy or retraining program targeted at displaced auto workers achieves the announced goal at lower cost.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>Full 300-450 word essay hitting U5 prediction, comparative-advantage connection, positive/normative distinction with quoted examples, and a recommendation with two reasons. A defensible recommendation can go either way.</li></ul><p class="solution-label">Grading notes:</p><p>4 pts: tariff prediction (price up, quantity imports down, gainers and losers identified). 3 pts: comparative-advantage connection. 3 pts: positive vs normative distinction with examples. 3 pts: recommendation with two reasons. 2 pts: writing quality and structure.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U6 — Skill Benchmark: Market Analysis</strong></span>
+  </footer>
+</article>
+
+<article class="item" id="item-23" data-item-num="23" data-tier="LA" data-points="15" data-qtype="essayQuestion">
+  <header class="item-head">
+    <div class="item-num"><span class="num-label">Item 23</span><span class="pt-tag">15 pts</span></div>
+    <div class="item-tags">
+      <span class="tag klo">KLO-9</span>
+      <span class="tag unit">U6</span>
+    </div>
+  </header>
+  <div class="item-stem">A growing city is debating two competing housing policies: (A) a strict rent ceiling on existing apartments, set 25 percent below current market rent; or (B) zoning reform that allows denser construction in single-family neighborhoods. Write an extended analysis (300-450 words) that does the following: (1) Work through which side of the rental-housing market each policy affects and in which direction, then predict the short-run and long-run effects of each on equilibrium price and quantity. (2) Apply the consumer-surplus, producer-surplus, and total-surplus reasoning at an intuition level (qualitative, no triangle math) to identify which groups gain and which lose under each policy. (3) Identify at least one positive claim and one normative claim involved in choosing between the two. (4) Recommend one policy over the other (or a combination), with reasoning grounded in the unit's content on markets, surplus, and policy.</div>
+  <div class="item-interaction">
+    <div class="write-block"><label for="item-23-text" class="write-label">Your response</label><textarea id="item-23-text" rows="6" placeholder="Type your answer here. Saved locally as you go."></textarea><div class="write-row"><button type="button" class="reveal-btn btn primary">Reveal sample answer</button><span class="write-help">When you have a draft, reveal the sample answer to compare.</span></div><div class="reveal-target" hidden></div></div>
+  </div>
+  <div class="item-reveal reveal-write" hidden>
+    <p class="solution-label">Sample answer:</p><p>Policy A is a price ceiling set 25 percent below market rent. It works on the price side directly. In the short run, the existing stock of rental housing is roughly fixed, so quantity supplied stays close to current levels and the rent caps below market. Quantity demanded jumps at the lower price, producing a shortage that is rationed by queue, social connections, or under-the-table payments. In the long run, developers facing a 25 percent rent haircut build less. The supply curve contracts. Equilibrium quantity of housing falls below the no-policy counterfactual, and the implicit market-clearing rent for whatever exists rises, even though the controlled rent is held down. Existing tenants in controlled units gain (rent below market). Prospective tenants lose: fewer units to rent into. Landlords lose: rents below cost-recovery for marginal units. Total surplus falls: trades that would have happened do not, search and queueing costs rise, units get misallocated to incumbents whose households have changed.
+
+Policy B is a supply-side reform. Allowing denser construction in single-family neighborhoods raises the long-run quantity of housing the city can produce at any given price. Supply curve shifts rightward. In the short run, little changes (construction is slow). In the long run, equilibrium quantity rises and equilibrium rent falls. Renters as a whole gain (lower rents, more units). Owners of existing single-family lots near transit gain (their land becomes more valuable as denser uses are allowed). Owners of existing rental buildings face more competition (rents on their units may fall). On balance, total surplus rises: more trades happen, and the surplus is captured by a broad group of renters rather than concentrated in any one constituency.
+
+Positive claim: &quot;rent ceilings reduce long-run housing supply.&quot; This is empirical and consistent with the cross-city evidence. Normative claim: &quot;the city has a duty to protect current tenants from rent increases even at the cost of reducing future housing supply.&quot; Value-laden.
+
+Recommendation: I would choose Policy B. Two reasons. First, B addresses the underlying scarcity that drives high rents in the first place, while A holds rent down on a stock of units that will shrink. Second, B's distributional effects are broader and forward-looking: it helps current renters and future renters, rather than transferring surplus from landlords and prospective renters to incumbent tenants. A targeted rent-assistance program for low-income tenants can sit alongside B without recreating the supply contraction.</p><p class="solution-label">Key points an answer must hit:</p><ul><li>Full essay covering both policies with U2 + U4 analysis, positive/normative ID, and a defensible recommendation.</li></ul><p class="solution-label">Grading notes:</p><p>4 pts: predictions for both policies (2 each). 3 pts: distributional analysis for both policies (gainers and losers under each). 3 pts: positive vs normative claims. 3 pts: recommendation with two reasons. 2 pts: writing.</p><p class="reveal-footer">The sample is not the only acceptable answer. What matters is hitting the load-bearing moves in the key points.</p>
+  </div>
+  <footer class="item-foot">
+    <span class="review-eyebrow">Review</span>
+    <span class="review-body"><strong>U6 — Skill Benchmark: Market Analysis</strong></span>
+  </footer>
+</article>
+  </div>
+</section>
+</main>
+
+<footer class="colophon">
+  <p>ECONM-I · Practice Midterm · Companion to the static U7 / U14 "Before Your Exam" pages. Calibrated to look like the real exam: same shape, same difficulty range, different items drawn from the bank.</p>
+</footer>
+
+<script>
+window.__NUM = window.__NUM || {};
+
+const STORE_KEY = "econm1-practice-midterm-v1";
+const SCORE_TOTALS = { AG: 30, SA: 30, LA: 45 };
+const state = (() => {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); } catch { return {}; }
+})();
+function persist() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+
+function recomputeScore() {
+  const sums = { AG: 0, SA: 0, LA: 0 };
+  document.querySelectorAll(".item").forEach(item => {
+    const tier = item.dataset.tier;
+    const pts = parseInt(item.dataset.points, 10) || 0;
+    const id = item.id;
+    const s = state[id];
+    if (!s) return;
+    if (s.outcome === "correct") sums[tier] += pts;
+    else if (s.outcome === "self-credit") sums[tier] += pts;
+  });
+  document.getElementById("score-ag").textContent = sums.AG;
+  document.getElementById("score-sa").textContent = sums.SA;
+  document.getElementById("score-la").textContent = sums.LA;
+  document.getElementById("score-total").textContent = sums.AG + sums.SA + sums.LA;
+}
+
+// Rebuild item interaction state from persisted state.
+function restoreItem(item) {
+  const id = item.id;
+  const s = state[id];
+  if (!s) return;
+  const tier = item.dataset.tier;
+  const qtype = item.dataset.qtype;
+
+  if (qtype === "multipleChoice" || qtype === "multipleAnswer" || qtype === "trueFalse") {
+    const buttons = item.querySelectorAll(".cq-options button");
+    buttons.forEach(b => {
+      b.disabled = true;
+      if (b.dataset.correct === "true") b.classList.add("reveal-correct");
+    });
+    if (s.choseIdx != null && buttons[s.choseIdx]) {
+      const chose = buttons[s.choseIdx];
+      chose.classList.remove("reveal-correct");
+      chose.classList.add(s.outcome === "correct" ? "chosen-correct" : "chosen-wrong");
+    }
+    const explainTxt = s.explain || "";
+    const reveal = item.querySelector(".item-reveal");
+    if (reveal) {
+      reveal.hidden = false;
+      if (explainTxt) {
+        const explainEl = document.createElement("p");
+        explainEl.className = "wrong-explain";
+        explainEl.style.fontStyle = "italic";
+        explainEl.style.color = "var(--ink-soft)";
+        explainEl.textContent = explainTxt;
+        reveal.insertBefore(explainEl, reveal.firstChild);
+      }
+    }
+  } else if (qtype === "numerical") {
+    const input = item.querySelector(".num-input");
+    if (input && s.value != null) input.value = s.value;
+    const fb = item.querySelector(".num-feedback");
+    if (fb) {
+      fb.textContent = s.feedback || "";
+      fb.classList.add(s.outcome === "correct" ? "right" : "wrong");
+    }
+    const reveal = item.querySelector(".item-reveal");
+    if (reveal) reveal.hidden = false;
+    const btn = item.querySelector(".num-check");
+    if (btn) btn.disabled = true;
+  } else {
+    // writing
+    const ta = item.querySelector("textarea");
+    if (ta && s.draft != null) ta.value = s.draft;
+    if (s.revealed) {
+      const reveal = item.querySelector(".item-reveal");
+      if (reveal) reveal.hidden = false;
+      const tgt = item.querySelector(".reveal-target");
+      if (tgt) tgt.hidden = false;
+      // Show self-score buttons
+      addSelfScore(item);
+    }
+  }
+}
+
+function addSelfScore(item) {
+  if (item.querySelector(".self-score")) return;
+  const row = document.createElement("div");
+  row.className = "self-score";
+  row.style.marginTop = "16px";
+  row.style.paddingTop = "12px";
+  row.style.borderTop = "1px dashed var(--rule-soft)";
+  row.style.display = "flex";
+  row.style.gap = "10px";
+  row.style.flexWrap = "wrap";
+  row.style.alignItems = "center";
+  const id = item.id;
+  const cur = state[id] || {};
+  const pts = parseInt(item.dataset.points, 10) || 0;
+  row.innerHTML = '<span style="font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-faint);">Self-score:</span>'
+    + '<button type="button" class="btn ss-full" data-credit="full">Hit the key points (' + pts + '/' + pts + ')</button>'
+    + '<button type="button" class="btn ss-partial" data-credit="partial">Partial (' + Math.floor(pts/2) + '/' + pts + ')</button>'
+    + '<button type="button" class="btn ss-none" data-credit="none">Missed it (0/' + pts + ')</button>';
+  const reveal = item.querySelector(".item-reveal");
+  if (reveal) reveal.appendChild(row);
+  else item.appendChild(row);
+  // Highlight current selection
+  if (cur.selfCredit) {
+    const sel = row.querySelector(".ss-" + cur.selfCredit);
+    if (sel) { sel.classList.add("primary"); }
+  }
+  row.querySelectorAll("button").forEach(b => {
+    b.addEventListener("click", () => {
+      const credit = b.dataset.credit;
+      const map = { full: pts, partial: Math.floor(pts/2), none: 0 };
+      const earned = map[credit];
+      state[id] = {
+        ...(state[id] || {}),
+        revealed: true,
+        selfCredit: credit,
+        outcome: earned === pts ? "self-credit" : (earned > 0 ? "self-credit" : "self-zero"),
+      };
+      // Override outcome to be a partial-credit equivalent by scaling later — for the score readout
+      // we treat any nonzero credit as adding `earned` pts. To keep recomputeScore simple, we set
+      // a `partialPts` field and use that.
+      state[id].partialPts = earned;
+      persist();
+      // Visual mark
+      row.querySelectorAll("button").forEach(x => x.classList.remove("primary"));
+      b.classList.add("primary");
+      recomputeScorePartial();
+    });
+  });
+}
+
+// Override score recompute to honor partialPts on revealed writing items.
+function recomputeScorePartial() {
+  const sums = { AG: 0, SA: 0, LA: 0 };
+  document.querySelectorAll(".item").forEach(item => {
+    const tier = item.dataset.tier;
+    const pts = parseInt(item.dataset.points, 10) || 0;
+    const id = item.id;
+    const s = state[id];
+    if (!s) return;
+    if (s.outcome === "correct") sums[tier] += pts;
+    else if (s.partialPts != null) sums[tier] += s.partialPts;
+  });
+  document.getElementById("score-ag").textContent = sums.AG;
+  document.getElementById("score-sa").textContent = sums.SA;
+  document.getElementById("score-la").textContent = sums.LA;
+  document.getElementById("score-total").textContent = sums.AG + sums.SA + sums.LA;
+}
+
+// Bind MCQ / TF buttons
+document.querySelectorAll(".cq-options").forEach(opts => {
+  const buttons = opts.querySelectorAll("button");
+  buttons.forEach((b, idx) => {
+    b.addEventListener("click", () => {
+      if (b.disabled) return;
+      const correct = b.dataset.correct === "true";
+      buttons.forEach((o, oi) => {
+        o.disabled = true;
+        if (o.dataset.correct === "true") {
+          o.classList.add(o === b ? "chosen-correct" : "reveal-correct");
+        } else if (o === b) {
+          o.classList.add("chosen-wrong");
+        }
+      });
+      const item = b.closest(".item");
+      const reveal = item.querySelector(".item-reveal");
+      if (reveal) reveal.hidden = false;
+      // Add wrong-answer explanation at the top of the reveal if available.
+      const explain = b.dataset.explain || "";
+      if (explain && !correct) {
+        const explainEl = document.createElement("p");
+        explainEl.className = "wrong-explain";
+        explainEl.style.fontStyle = "italic";
+        explainEl.style.color = "var(--ink-soft)";
+        explainEl.textContent = explain;
+        reveal.insertBefore(explainEl, reveal.firstChild);
+      }
+      state[item.id] = {
+        choseIdx: idx,
+        outcome: correct ? "correct" : "wrong",
+        explain,
+      };
+      persist();
+      recomputeScorePartial();
+    });
+  });
+});
+
+// Bind numerical Check
+document.querySelectorAll(".num-check").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const item = btn.closest(".item");
+    const input = item.querySelector(".num-input");
+    const val = parseFloat((input.value || "").replace(/[$,\s]/g, ""));
+    const expected = window.__NUM[item.id];
+    const fb = item.querySelector(".num-feedback");
+    if (expected == null) {
+      fb.textContent = "Sample answer revealed below.";
+      fb.classList.add("right");
+    } else if (isNaN(val)) {
+      fb.textContent = "Enter a number.";
+      fb.classList.add("wrong");
+      return;
+    } else {
+      const margin = Math.max(Math.abs(expected) * 0.05, 0.01);
+      const within = Math.abs(val - expected) <= margin;
+      if (within) {
+        fb.textContent = "Right. Expected " + expected + ".";
+        fb.classList.add("right");
+        state[item.id] = { value: val, outcome: "correct", feedback: fb.textContent };
+      } else {
+        fb.textContent = "Not quite. Expected " + expected + ". Your work goes below; check it against the solution.";
+        fb.classList.add("wrong");
+        state[item.id] = { value: val, outcome: "wrong", feedback: fb.textContent };
+      }
+    }
+    btn.disabled = true;
+    const reveal = item.querySelector(".item-reveal");
+    if (reveal) reveal.hidden = false;
+    persist();
+    recomputeScorePartial();
+  });
+});
+
+// Bind writing reveal
+document.querySelectorAll(".reveal-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const item = btn.closest(".item");
+    const reveal = item.querySelector(".item-reveal");
+    if (reveal) reveal.hidden = false;
+    btn.disabled = true;
+    state[item.id] = {
+      ...(state[item.id] || {}),
+      draft: (item.querySelector("textarea") || {}).value || "",
+      revealed: true,
+    };
+    addSelfScore(item);
+    persist();
+  });
+});
+
+// Save drafts as the student types
+document.querySelectorAll(".item textarea").forEach(ta => {
+  ta.addEventListener("input", () => {
+    const item = ta.closest(".item");
+    state[item.id] = { ...(state[item.id] || {}), draft: ta.value };
+    persist();
+  });
+});
+
+// Reset
+document.getElementById("reset-btn").addEventListener("click", () => {
+  if (!confirm("Reset all progress on this practice exam?")) return;
+  localStorage.removeItem(STORE_KEY);
+  location.reload();
+});
+
+// Restore on load
+document.querySelectorAll(".item").forEach(restoreItem);
+recomputeScorePartial();
+</script>
+</body>
+</html>
