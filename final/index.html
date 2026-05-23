@@ -113,7 +113,16 @@ main{max-width:1000px;margin:0 auto;padding:30px var(--gutter) 80px;}
 footer.colophon{padding:40px var(--gutter);border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--ink-faint);text-align:center;background:var(--paper);}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
-@media print{.score-bar{position:static;} .item-reveal{display:block!important;} .item-reveal[hidden]{display:block!important;}}
+@media print{
+  .score-bar{position:static;}
+  .item-reveal{display:block!important;}
+  .item-reveal[hidden]{display:block!important;}
+  /* Suppress trailing blank pages: cap document height to content and zero out
+     margins that Chrome headless otherwise pads with another sheet. */
+  html, body{margin:0;padding:0;}
+  footer.colophon{padding:18px var(--gutter) 8px;page-break-after:avoid;break-after:avoid;}
+  main{padding-bottom:24px;}
+}
 </style>
 </head>
 <body>
